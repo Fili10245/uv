@@ -1,133 +1,241 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Prof. Fili | Cursos</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prof. Fili | Cursos</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-        }
+<style>
 
-        header {
-            border-bottom: 2px solid #000;
-            padding: 20px;
-            text-align: center;
-        }
+/* RESET */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #000;
+}
 
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-            letter-spacing: 1px;
-        }
+/* NAVBAR TOP (tipo W3Schools) */
+.topnav {
+    position: fixed;
+    width: 100%;
+    background: #000;
+    color: #fff;
+    padding: 12px 20px;
+    z-index: 1000;
+}
 
-        header p {
-            margin: 5px 0 0;
-            font-size: 14px;
-        }
+.topnav a {
+    color: white;
+    margin-right: 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
 
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            padding: 15px;
-            border-bottom: 1px solid #000;
-        }
+/* HERO SECTION */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
-        nav a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            transition: 0.2s;
-        }
+.hero h1 {
+    font-size: 50px;
+    margin: 0;
+}
 
-        nav a:hover {
-            text-decoration: underline;
-        }
+.hero p {
+    font-size: 20px;
+}
 
-        main {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+/* LAYOUT */
+.container {
+    display: flex;
+    margin-top: 60px;
+}
 
-        .course {
-            border: 1px solid #000;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: 0.2s;
-        }
+/* SIDEBAR */
+.sidebar {
+    width: 250px;
+    background: #f4f4f4;
+    padding: 20px;
+    height: 100vh;
+    position: sticky;
+    top: 60px;
+}
 
-        .course:hover {
-            background-color: #f5f5f5;
-        }
+.sidebar h3 {
+    margin-top: 0;
+}
 
-        .course h2 {
-            margin-top: 0;
-            font-size: 20px;
-        }
+.sidebar a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    margin-bottom: 10px;
+}
 
-        .course p {
-            font-size: 14px;
-        }
+.sidebar a:hover {
+    font-weight: bold;
+}
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid #000;
-            font-size: 12px;
-            margin-top: 40px;
-        }
-    </style>
+/* MAIN */
+main {
+    flex: 1;
+    padding: 40px;
+}
+
+/* SECTION BLOCK */
+.section {
+    padding: 40px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* COURSE CARDS */
+.card {
+    border: 1px solid #000;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    background: #f0f0f0;
+}
+
+/* BUTTON STYLE */
+.button {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid black;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.button:hover {
+    background: black;
+    color: white;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #000;
+    color: #fff;
+}
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+}
+
+</style>
 </head>
 
 <body>
 
-<header>
-    <h1>Prof. Fili</h1>
-    <p>Ingeniería | Recursos Académicos</p>
-</header>
-
-<nav>
+<!-- TOP NAV -->
+<div class="topnav">
+    <a href="#">Inicio</a>
     <a href="#momentum">Momentum</a>
     <a href="#fluidos">Fluidos</a>
-    <a href="#numericos">Métodos Numéricos</a>
-</nav>
+    <a href="#numericos">Numéricos</a>
+</div>
 
+<!-- HERO -->
+<section class="hero">
+    <div>
+        <h1>Portal Académico</h1>
+        <p>Ingeniería | Prof. Fili</p>
+    </div>
+</section>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <h3>Cursos</h3>
+    <a href="#momentum">Transferencia de Momentum</a>
+    <a href="#fluidos">Mecánica de Fluidos</a>
+    <a href="#numericos">Métodos Numéricos</a>
+
+    <h3>Recursos</h3>
+    <a href="#">Programa</a>
+    <a href="#">Bibliografía</a>
+    <a href="#">Software</a>
+</aside>
+
+<!-- MAIN -->
 <main>
 
-    <section id="momentum" class="course">
-        <h2>Fundamentos de Transferencia de Momentum</h2>
-        <p>
-            Conceptos básicos de transporte de cantidad de movimiento, esfuerzos,
-            ecuaciones diferenciales y aplicaciones en sistemas de ingeniería.
-        </p>
-        <a href="transferencia-calor-masa.md">Ver material</a>
-    </section>
+<!-- MOMENTUM -->
+<section id="momentum" class="section">
+    <h2>Transferencia de Momentum</h2>
 
-    <section id="fluidos" class="course">
-        <h2>Mecánica de Fluidos</h2>
-        <p>
-            Estudio del comportamiento de fluidos en reposo y movimiento.
-            Incluye análisis de flujo, energía, y ecuaciones fundamentales.
-        </p>
-        <a href="fenomenos-superficie.md">Ver material</a>
-    </section>
+    <div class="card">
+        <h4>Semana 1</h4>
+        <p>Conceptos básicos: esfuerzo y viscosidad.</p>
+        <a class="button" href="transferencia-calor-masa.md">Notas</a>
+        <a class="button" href="#">PDF</a>
+    </div>
 
-    <section id="numericos" class="course">
-        <h2>Métodos Numéricos</h2>
-        <p>
-            Técnicas computacionales para resolver ecuaciones no lineales,
-            sistemas algebraicos, interpolación y ecuaciones diferenciales.
-        </p>
-        <a href="simulacion-optimizacion.md">Ver material</a>
-    </section>
+    <div class="card">
+        <h4>Semana 2</h4>
+        <p>Ecuaciones de transporte.</p>
+        <a class="button" href="#">Notas</a>
+    </div>
+</section>
+
+<!-- FLUIDOS -->
+<section id="fluidos" class="section">
+    <h2>Mecánica de Fluidos</h2>
+
+    <div class="card">
+        <h4>Semana 1</h4>
+        <p>Propiedades de fluidos.</p>
+        <a class="button" href="fenomenos-superficie.md">Notas</a>
+    </div>
+
+    <div class="card">
+        <h4>Semana 2</h4>
+        <p>Estática de fluidos.</p>
+    </div>
+</section>
+
+<!-- NUMERICOS -->
+<section id="numericos" class="section">
+    <h2>Métodos Numéricos</h2>
+
+    <div class="card">
+        <h4>Semana 1</h4>
+        <p>Raíces de ecuaciones.</p>
+        <a class="button" href="simulacion-optimizacion.md">Notas</a>
+    </div>
+
+    <div class="card">
+        <h4>Semana 2</h4>
+        <p>Sistemas de ecuaciones.</p>
+    </div>
+</section>
 
 </main>
+</div>
 
 <footer>
     © 2026 Prof. Fili | Universidad Veracruzana
