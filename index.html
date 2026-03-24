@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prof. Fili | Cursos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        header {
+            border-bottom: 2px solid #000;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            font-size: 14px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 15px;
+            border-bottom: 1px solid #000;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .course {
+            border: 1px solid #000;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+
+        .course:hover {
+            background-color: #f5f5f5;
+        }
+
+        .course h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .course p {
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #000;
+            font-size: 12px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Prof. Fili</h1>
+    <p>Ingeniería | Recursos Académicos</p>
+</header>
+
+<nav>
+    <a href="#momentum">Momentum</a>
+    <a href="#fluidos">Fluidos</a>
+    <a href="#numericos">Métodos Numéricos</a>
+</nav>
+
+<main>
+
+    <section id="momentum" class="course">
+        <h2>Fundamentos de Transferencia de Momentum</h2>
+        <p>
+            Conceptos básicos de transporte de cantidad de movimiento, esfuerzos,
+            ecuaciones diferenciales y aplicaciones en sistemas de ingeniería.
+        </p>
+        <a href="transferencia-calor-masa.md">Ver material</a>
+    </section>
+
+    <section id="fluidos" class="course">
+        <h2>Mecánica de Fluidos</h2>
+        <p>
+            Estudio del comportamiento de fluidos en reposo y movimiento.
+            Incluye análisis de flujo, energía, y ecuaciones fundamentales.
+        </p>
+        <a href="fenomenos-superficie.md">Ver material</a>
+    </section>
+
+    <section id="numericos" class="course">
+        <h2>Métodos Numéricos</h2>
+        <p>
+            Técnicas computacionales para resolver ecuaciones no lineales,
+            sistemas algebraicos, interpolación y ecuaciones diferenciales.
+        </p>
+        <a href="simulacion-optimizacion.md">Ver material</a>
+    </section>
+
+</main>
+
+<footer>
+    © 2026 Prof. Fili | Universidad Veracruzana
+</footer>
+
+</body>
+</html>
