@@ -3,42 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prof. Fili | Cursos</title>
+<title>Prof. Fili | Portal Académico</title>
 
 <style>
 
-/* RESET */
+/* BASE */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    color: #000;
+    background: #111;
+    color: #eee;
 }
 
-/* NAVBAR TOP (tipo W3Schools) */
+/* TOP NAV */
 .topnav {
     position: fixed;
     width: 100%;
     background: #000;
-    color: #fff;
     padding: 12px 20px;
     z-index: 1000;
 }
 
 .topnav a {
-    color: white;
+    color: #ccc;
     margin-right: 20px;
     text-decoration: none;
     font-weight: bold;
 }
 
-/* HERO SECTION */
+.topnav a:hover {
+    color: #fff;
+}
+
+/* HERO */
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-                url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f');
+    background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
+                url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');
     background-size: cover;
     background-position: center;
-    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,7 +54,7 @@ body {
 }
 
 .hero p {
-    font-size: 20px;
+    color: #aaa;
 }
 
 /* LAYOUT */
@@ -62,27 +65,28 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-    width: 250px;
-    background: #f4f4f4;
+    width: 260px;
+    background: #1a1a1a;
     padding: 20px;
     height: 100vh;
     position: sticky;
     top: 60px;
+    border-right: 1px solid #333;
 }
 
 .sidebar h3 {
-    margin-top: 0;
+    color: #fff;
 }
 
 .sidebar a {
     display: block;
+    color: #bbb;
     text-decoration: none;
-    color: black;
     margin-bottom: 10px;
 }
 
 .sidebar a:hover {
-    font-weight: bold;
+    color: white;
 }
 
 /* MAIN */
@@ -91,37 +95,47 @@ main {
     padding: 40px;
 }
 
-/* SECTION BLOCK */
+/* SECTION */
 .section {
-    padding: 40px 0;
-    border-bottom: 1px solid #ddd;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.6s ease;
 }
 
-/* COURSE CARDS */
+.section.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* CARD */
 .card {
-    border: 1px solid #000;
+    background: #1e1e1e;
+    border: 1px solid #333;
     padding: 20px;
     margin-bottom: 20px;
     transition: 0.3s;
 }
 
 .card:hover {
-    background: #f0f0f0;
+    transform: scale(1.02);
+    border-color: #666;
 }
 
-/* BUTTON STYLE */
+/* BUTTON */
 .button {
     display: inline-block;
-    padding: 8px 12px;
-    border: 1px solid black;
+    padding: 6px 10px;
+    border: 1px solid #888;
+    color: #ccc;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
     margin-right: 10px;
 }
 
 .button:hover {
-    background: black;
-    color: white;
+    background: #fff;
+    color: #000;
 }
 
 /* FOOTER */
@@ -129,7 +143,7 @@ footer {
     text-align: center;
     padding: 20px;
     background: #000;
-    color: #fff;
+    color: #aaa;
 }
 
 /* RESPONSIVE */
@@ -150,7 +164,7 @@ footer {
 
 <body>
 
-<!-- TOP NAV -->
+<!-- NAV -->
 <div class="topnav">
     <a href="#">Inicio</a>
     <a href="#momentum">Momentum</a>
@@ -171,9 +185,9 @@ footer {
 <!-- SIDEBAR -->
 <aside class="sidebar">
     <h3>Cursos</h3>
-    <a href="#momentum">Transferencia de Momentum</a>
-    <a href="#fluidos">Mecánica de Fluidos</a>
-    <a href="#numericos">Métodos Numéricos</a>
+    <a href="#momentum">Momentum</a>
+    <a href="#fluidos">Fluidos</a>
+    <a href="#numericos">Numéricos</a>
 
     <h3>Recursos</h3>
     <a href="#">Programa</a>
@@ -184,7 +198,6 @@ footer {
 <!-- MAIN -->
 <main>
 
-<!-- MOMENTUM -->
 <section id="momentum" class="section">
     <h2>Transferencia de Momentum</h2>
 
@@ -192,17 +205,14 @@ footer {
         <h4>Semana 1</h4>
         <p>Conceptos básicos: esfuerzo y viscosidad.</p>
         <a class="button" href="transferencia-calor-masa.md">Notas</a>
-        <a class="button" href="#">PDF</a>
     </div>
 
     <div class="card">
         <h4>Semana 2</h4>
         <p>Ecuaciones de transporte.</p>
-        <a class="button" href="#">Notas</a>
     </div>
 </section>
 
-<!-- FLUIDOS -->
 <section id="fluidos" class="section">
     <h2>Mecánica de Fluidos</h2>
 
@@ -218,7 +228,6 @@ footer {
     </div>
 </section>
 
-<!-- NUMERICOS -->
 <section id="numericos" class="section">
     <h2>Métodos Numéricos</h2>
 
@@ -240,6 +249,20 @@ footer {
 <footer>
     © 2026 Prof. Fili | Universidad Veracruzana
 </footer>
+
+<!-- ANIMATIONS -->
+<script>
+const sections = document.querySelectorAll('.section');
+
+window.addEventListener('scroll', () => {
+    sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top;
+        if (top < window.innerHeight - 100) {
+            sec.classList.add('show');
+        }
+    });
+});
+</script>
 
 </body>
 </html>
