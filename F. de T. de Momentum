@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transferencia de Momentum</title>
+
+<style>
+
+/* FONDO GLOBAL CON IMAGEN */
+body {
+    margin: 0;
+    font-family: Arial;
+    color: #000;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('CauchyDeriv.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* NAV */
+.topnav {
+    background: rgba(0,0,0,0.9);
+    padding: 10px;
+}
+
+.topnav a {
+    color: white;
+    text-decoration: none;
+}
+
+/* LAYOUT */
+.container {
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 250px;
+    background: rgba(255,255,255,0.9);
+    padding: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: #333;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+/* MAIN */
+main {
+    flex: 1;
+    padding: 40px;
+}
+
+/* SECTIONS */
+.section {
+    margin-bottom: 40px;
+}
+
+/* TARJETAS EN BLANCO (CLAVE PARA LEGIBILIDAD) */
+.card {
+    background: rgba(255,255,255,0.95);
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+/* BOTONES */
+.button {
+    border: 1px solid #333;
+    padding: 6px 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: black;
+    color: white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="topnav">
+    <a href="index.html">← Volver</a>
+</div>
+
+<div class="container">
+
+<aside class="sidebar">
+    <h3>Contenido</h3>
+    <a href="#semana1">Semana 1</a>
+    <a href="#semana2">Semana 2</a>
+</aside>
+
+<main>
+
+<h1 style="color:white;">Transferencia de Momentum</h1>
+
+<section id="semana1" class="section">
+    <h2 style="color:white;">Semana 1</h2>
+    <div class="card">
+        <p>Conceptos básicos</p>
+        <a class="button" href="transferencia-calor-masa.md">Notas</a>
+    </div>
+</section>
+
+<section id="semana2" class="section">
+    <h2 style="color:white;">Semana 2</h2>
+    <div class="card">
+        <p>Ecuaciones de transporte</p>
+    </div>
+</section>
+
+</main>
+</div>
+
+</body>
+</html>
