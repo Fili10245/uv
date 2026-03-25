@@ -113,6 +113,35 @@ $$ P_1 + \frac{1}{2}\rho v_1^2 + \rho gh_1 = P_2 + \frac{1}{2}\rho v_2^2 + \rho 
 $$ \tau_{yx} = -\mu \frac{dv_x}{dy} $$
         <a class="button" href="transferencia-calor-masa.md">Notas</a>
     </div>
+    <div class="seccion-ecuaciones">
+    
+    <h3>1. Ecuación de Movimiento de Cauchy</h3>
+    <p>Es la forma más general de la conservación del momentum para cualquier medio continuo:</p>
+    <div style="overflow-x:auto;">
+        $$ \rho \frac{D\mathbf{u}}{Dt} = \nabla \cdot \boldsymbol{\sigma} + \rho \mathbf{f} $$
+    </div>
+    <ul>
+        <li><strong>\(\rho \frac{D\mathbf{u}}{Dt}\)</strong>: Inercia (masa por aceleración sustancial).</li>
+        <li><strong>\(\nabla \cdot \boldsymbol{\sigma}\)</strong>: Divergencia del tensor de esfuerzos (fuerzas de superficie).</li>
+        <li><strong>\(\rho \mathbf{f}\)</strong>: Fuerzas de cuerpo (como la gravedad).</li>
+    </ul>
+
+    <hr>
+
+    <h3>2. Ecuación de Navier-Stokes</h3>
+    <p>Para fluidos newtonianos e incompresibles (\(\nabla \cdot \mathbf{u} = 0\)):</p>
+    <div style="overflow-x:auto;">
+        $$ \rho \left( \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} \right) = -\nabla p + \mu \nabla^2 \mathbf{u} + \rho \mathbf{g} $$
+    </div>
+    <ul>
+        <li><strong>\(\rho \frac{\partial \mathbf{u}}{\partial t}\)</strong>: Cambio local de velocidad con el tiempo.</li>
+        <li><strong>\(\rho (\mathbf{u} \cdot \nabla)\mathbf{u}\)</strong>: Término advectivo (transporte de momentum por el flujo).</li>
+        <li><strong>\(-\nabla p\)</strong>: Fuerza debida al gradiente de presión.</li>
+        <li><strong>\(\mu \nabla^2 \mathbf{u}\)</strong>: Término viscoso (difusión de momentum).</li>
+        <li><strong>\(\rho \mathbf{g}\)</strong>: Fuerza gravitacional.</li>
+    </ul>
+
+</div>
 </section>
 
 <section id="semana2" class="section">
