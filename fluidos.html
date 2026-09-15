@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mecánica de Fluidos | Prof. Fili — UV</title>
+
+<!-- MathJax: renderiza fórmulas escritas con $...$ (en línea) o $$...$$ (bloque) -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+<style>
+:root{
+  --bg:#111;
+  --bg-soft:#1a1a1a;
+  --card:#1e1e1e;
+  --card-2:#242424;
+  --line:#333;
+  --line-soft:#2a2a2a;
+  --text:#eee;
+  --muted:#9a9a9a;
+  --accent:#39b3a6;        /* teal discreto, guiño a la UV */
+  --accent-dim:#1e6b63;
+  --code-bg:#0d0d0d;
+  --warn:#c9a227;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.55;
+}
+
+a{color:var(--accent);}
+
+/* ---------- TOP NAV ---------- */
+.topnav{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#000;
+  border-bottom:1px solid var(--line);
+  padding:12px 20px;
+  display:flex;
+  gap:22px;
+  align-items:center;
+}
+.topnav a{
+  color:#ccc;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:14px;
+}
+.topnav a:hover{color:#fff;}
+.topnav .brand{margin-left:auto;font-weight:bold;font-size:13px;color:var(--muted);}
+
+/* ---------- HEADER ---------- */
+header.hero{
+  padding:46px 24px 30px;
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(1200px 200px at 15% -40%, rgba(57,179,166,0.10), transparent 60%),
+    var(--bg);
+}
+header.hero .wrap{max-width:1100px;margin:0 auto;}
+header.hero h1{
+  margin:0 0 6px;
+  font-size:38px;
+  letter-spacing:0.3px;
+}
+header.hero .sub{color:var(--muted);margin:0 0 18px;font-size:15px;}
+.meta{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  border:1px solid var(--line);
+  background:var(--bg-soft);
+  color:#cfcfcf;
+  font-size:12px;
+  padding:5px 10px;
+  border-radius:2px;
+}
+.chip b{color:#fff;font-weight:bold;}
+
+/* ---------- LAYOUT ---------- */
+.container{display:flex;gap:0;max-width:1200px;margin:0 auto;align-items:flex-start;}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+  width:270px;
+  flex:0 0 270px;
+  background:var(--bg-soft);
+  border-right:1px solid var(--line);
+  padding:22px 18px;
+  position:sticky;
+  top:49px;
+  height:calc(100vh - 49px);
+  overflow-y:auto;
+}
+.sidebar h3{
+  color:#fff;
+  font-size:12px;
+  letter-spacing:1px;
+  margin:20px 0 8px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--line);
+}
+.sidebar h3:first-child{margin-top:0;}
+.sidebar a{
+  display:block;
+  color:#bbb;
+  text-decoration:none;
+  font-size:13px;
+  padding:5px 8px;
+  border-left:2px solid transparent;
+  border-radius:2px;
+}
+.sidebar a:hover{color:#fff;background:#202020;}
+.sidebar a.active{color:#fff;border-left:2px solid var(--accent);background:#202020;}
+.sidebar a .wk{color:var(--muted);font-weight:bold;margin-right:6px;}
+
+/* ---------- MAIN ---------- */
+main{flex:1;padding:34px 40px 80px;min-width:0;}
+
+.intro{
+  border:1px solid var(--line);
+  background:var(--card);
+  padding:20px 22px;
+  margin-bottom:34px;
+  border-radius:3px;
+}
+.intro h2{margin-top:0;}
+.intro code{background:var(--code-bg);padding:2px 6px;border-radius:3px;font-size:13px;color:#e6e6e6;}
+
+.block-label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:44px 0 14px;
+  color:var(--accent);
+  font-size:13px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.block-label::after{content:"";flex:1;height:1px;background:var(--line);}
+.block-label:first-of-type{margin-top:8px;}
+
+/* ---------- WEEK CARD ---------- */
+.week{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:20px 22px;
+  margin-bottom:16px;
+  scroll-margin-top:70px;
+}
+.week.exam{border-left:3px solid var(--warn);}
+.week.project{border-left:3px solid var(--accent);}
+.week h3{margin:0 0 4px;font-size:19px;}
+.week h3 .num{color:var(--muted);font-size:13px;font-weight:bold;margin-right:10px;}
+.week .topics{color:#cfcfcf;font-size:14px;margin:8px 0 0;padding-left:18px;}
+.week .topics li{margin-bottom:2px;}
+
+/* botones de recursos */
+.resources{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid var(--line-soft);
+}
+.res{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid #6a6a6a;
+  color:#ddd;
+  text-decoration:none;
+  font-size:12.5px;
+  padding:6px 11px;
+  border-radius:3px;
+  background:#181818;
+}
+.res:hover{background:#fff;color:#000;border-color:#fff;}
+.res.pending{border-style:dashed;border-color:#4a4a4a;color:var(--muted);background:transparent;}
+.res.pending:hover{background:#202020;color:#ccc;border-color:#666;}
+.res .ic{font-size:14px;}
+
+/* ---------- VIDEO ---------- */
+.video-embed{
+  position:relative;
+  width:100%;
+  max-width:640px;
+  aspect-ratio:16/9;
+  margin:16px 0 4px;
+  border:1px solid var(--line);
+  border-radius:4px;
+  overflow:hidden;
+  background:#000;
+}
+.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+
+/* ---------- CODE ---------- */
+.code-block{margin:16px 0 6px;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--code-bg);}
+.code-tabs{display:flex;background:#151515;border-bottom:1px solid var(--line);}
+.code-tabs button{
+  background:transparent;border:0;color:var(--muted);
+  padding:9px 16px;font-size:13px;cursor:pointer;font-family:inherit;
+  border-bottom:2px solid transparent;
+}
+.code-tabs button:hover{color:#fff;}
+.code-tabs button.active{color:#fff;border-bottom:2px solid var(--accent);}
+.code-tabs .copy{margin-left:auto;font-size:12px;border-bottom:none;}
+.code-tabs .copy:hover{color:var(--accent);}
+.code-pane{display:none;}
+.code-pane.active{display:block;}
+pre{margin:0;padding:16px 18px;overflow-x:auto;}
+code, pre{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:13px;line-height:1.55;color:#e6e6e6;}
+
+/* formula callout */
+.formula{
+  background:var(--card-2);
+  border-left:3px solid var(--accent-dim);
+  padding:10px 16px;
+  margin:14px 0;
+  border-radius:0 3px 3px 0;
+  overflow-x:auto;
+}
+.note{color:var(--muted);font-size:13px;margin-top:6px;}
+
+details.tpl{border:1px solid var(--line);border-radius:3px;background:var(--bg-soft);padding:0 16px;margin-top:16px;}
+details.tpl summary{cursor:pointer;padding:12px 0;font-weight:bold;color:#fff;}
+details.tpl[open]{padding-bottom:14px;}
+
+/* ---------- FOOTER ---------- */
+footer{
+  text-align:center;
+  padding:26px 20px;
+  background:#000;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:860px){
+  .container{flex-direction:column;}
+  .sidebar{width:100%;flex:none;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);}
+  main{padding:24px 18px 60px;}
+  header.hero h1{font-size:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- =================== NAV =================== -->
+<nav class="topnav">
+  <a href="index.html">← Inicio</a>
+  <a href="momentum.html">Momentum</a>
+  <a href="fluidos.html">Fluidos</a>
+  <a href="numericos.html">Numéricos</a>
+  <span class="brand">Prof. Fili · Universidad Veracruzana</span>
+</nav>
+
+<!-- =================== HEADER =================== -->
+<header class="hero">
+  <div class="wrap">
+    <h1>Mecánica de Fluidos</h1>
+    <p class="sub">Licenciatura en Ingeniería Química · Facultad de Ciencias Químicas · Modalidad Curso-Taller</p>
+    <div class="meta">
+      <span class="chip">Código <b>QIIA 18004</b></span>
+      <span class="chip"><b>6</b> créditos</span>
+      <span class="chip"><b>2</b> h teoría · <b>2</b> h práctica</span>
+      <span class="chip"><b>16</b> semanas</span>
+      <span class="chip">Textos base: <b>Çengel &amp; Cimbala · Crane</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- =================== SIDEBAR =================== -->
+<aside class="sidebar">
+  <h3>SEMANAS</h3>
+  <a href="#s1"><span class="wk">S1</span>Propiedades de los fluidos</a>
+  <a href="#s2"><span class="wk">S2</span>Reología</a>
+  <a href="#s3"><span class="wk">S3</span>Ecuación de continuidad</a>
+  <a href="#s4"><span class="wk">S4</span>Ecuación de Bernoulli</a>
+  <a href="#s5"><span class="wk">S5</span>Pérdidas mayores (fricción)</a>
+  <a href="#s6"><span class="wk">S6</span>Pérdidas menores · 1.ᵉʳ parcial</a>
+  <a href="#s7"><span class="wk">S7</span>Bombas y turbinas</a>
+  <a href="#s8"><span class="wk">S8</span>Sistemas de bombeo</a>
+  <a href="#s9"><span class="wk">S9</span>Fluidos compresibles</a>
+  <a href="#s10"><span class="wk">S10</span>Compresores · 2.º parcial</a>
+  <a href="#s11"><span class="wk">S11</span>Flujo bifásico: patrones</a>
+  <a href="#s12"><span class="wk">S12</span>Simulación flujo bifásico</a>
+  <a href="#s13"><span class="wk">S13</span>Redes: Hardy Cross</a>
+  <a href="#s14"><span class="wk">S14</span>Simulación de redes</a>
+  <a href="#s15"><span class="wk">S15</span>Introducción a CFD</a>
+  <a href="#s16"><span class="wk">S16</span>Proyecto · final</a>
+
+  <h3>RECURSOS</h3>
+  <a href="#recursos">Bibliografía</a>
+  <a href="#recursos">Software</a>
+  <a href="#evaluacion">Evaluación</a>
+</aside>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- INTRO / CÓMO USAR -->
+  <section class="intro">
+    <h2>Sobre el curso</h2>
+    <p>Esta experiencia educativa fundamenta las propiedades de los fluidos para el diseño y
+    la operación de equipos de transporte en tuberías, en una y varias fases. El temario oficial
+    se organiza en 6 bloques de saberes, aquí distribuidos en 16 semanas, con énfasis en el
+    balance de energía mecánica, pérdidas por fricción, bombas y compresores, flujo multifásico,
+    redes hidráulicas e introducción a la CFD. Cada semana incluye espacio para
+    <b>notas (.md)</b>, <b>PDF</b>, <b>video</b> y <b>código de cálculo en MATLAB y Python</b>.</p>
+
+    <p class="note">Organización de archivos sugerida en el repositorio:</p>
+    <div class="code-block">
+      <div class="code-tabs"><button class="active" disabled>estructura</button></div>
+      <pre><code>uv/
+├── fluidos.html
+├── notas/           # apuntes en Markdown por semana  (sem01-propiedades.md, ...)
+├── pdf/             # lecturas, formularios y tareas    (sem05-friccion.pdf, ...)
+└── codigo/
+    ├── matlab/      # scripts .m   (colebrook.m, hardy_cross.m, ...)
+    └── python/      # scripts .py  (colebrook.py, hardy_cross.py, ...)</code></pre>
+    </div>
+
+    <details class="tpl">
+      <summary>▸ Plantilla: cómo agregar los recursos de una semana (copiar y pegar)</summary>
+      <p class="note">Copia este bloque, cámbiale el <code>id</code>, el título y las rutas de archivo.
+      Los botones con borde punteado (<code>class="res pending"</code>) marcan archivos que aún
+      no subes; quítales <code>pending</code> cuando el archivo exista.</p>
+      <div class="code-block">
+        <div class="code-tabs"><button class="active" disabled>HTML</button></div>
+        <pre><code>&lt;section id="s1" class="week"&gt;
+  &lt;h3&gt;&lt;span class="num"&gt;Semana 1&lt;/span&gt;Título del tema&lt;/h3&gt;
+  &lt;ul class="topics"&gt;
+    &lt;li&gt;Subtema A&lt;/li&gt;
+    &lt;li&gt;Subtema B&lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;!-- VIDEO incrustado (cambia el ID de YouTube tras /embed/) --&gt;
+  &lt;div class="video-embed"&gt;
+    &lt;iframe src="https://www.youtube.com/embed/VIDEO_ID"
+      title="Video" allowfullscreen loading="lazy"&gt;&lt;/iframe&gt;
+  &lt;/div&gt;
+
+  &lt;!-- FÓRMULA con MathJax --&gt;
+  &lt;div class="formula"&gt;$$ Re = \frac{\rho v D}{\mu} $$&lt;/div&gt;
+
+  &lt;!-- CÓDIGO con pestañas MATLAB / Python --&gt;
+  &lt;div class="code-block"&gt;
+    &lt;div class="code-tabs"&gt;
+      &lt;button class="active" onclick="showTab(this,'m1')"&gt;MATLAB&lt;/button&gt;
+      &lt;button onclick="showTab(this,'p1')"&gt;Python&lt;/button&gt;
+      &lt;button class="copy" onclick="copyCode(this)"&gt;copiar&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="code-pane active" id="m1"&gt;&lt;pre&gt;&lt;code&gt;% tu código .m&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;div class="code-pane" id="p1"&gt;&lt;pre&gt;&lt;code&gt;# tu código .py&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BOTONES de recursos (archivos) --&gt;
+  &lt;div class="resources"&gt;
+    &lt;a class="res" href="notas/sem01.md"&gt;&lt;span class="ic"&gt;📝&lt;/span&gt;Notas .md&lt;/a&gt;
+    &lt;a class="res" href="pdf/sem01.pdf"&gt;&lt;span class="ic"&gt;📄&lt;/span&gt;PDF&lt;/a&gt;
+    &lt;a class="res" href="https://youtu.be/VIDEO_ID"&gt;&lt;span class="ic"&gt;▶️&lt;/span&gt;Video&lt;/a&gt;
+    &lt;a class="res" href="codigo/matlab/archivo.m"&gt;&lt;span class="ic"&gt;🧮&lt;/span&gt;MATLAB&lt;/a&gt;
+    &lt;a class="res" href="codigo/python/archivo.py"&gt;&lt;span class="ic"&gt;🐍&lt;/span&gt;Python&lt;/a&gt;
+    &lt;a class="res pending" href="pdf/tareas/tarea01.pdf"&gt;&lt;span class="ic"&gt;✏️&lt;/span&gt;Tarea&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+      </div>
+    </details>
+  </section>
+
+
+  <!-- ============ BLOQUE 1 ============ -->
+  <div class="block-label">Bloque 1 · Momentum y propiedades de los fluidos</div>
+
+  <section id="s1" class="week">
+    <h3><span class="num">Semana 1</span>Introducción y propiedades de los fluidos</h3>
+    <ul class="topics">
+      <li>Relación entre transferencia de momentum y mecánica de fluidos</li>
+      <li>Propiedades: densidad, peso específico, viscosidad, tensión superficial, presión de vapor</li>
+      <li>Clasificación del flujo y número de Reynolds (Çengel cap. 1–2)</li>
+    </ul>
+    <div class="formula">$$ Re = \frac{\rho\,v\,D}{\mu} \qquad \text{laminar } Re<2300,\;\; \text{turbulento } Re>4000 $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem01-propiedades.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem01-propiedades.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Video · propiedades (LearnChemE)</a>
+      <a class="res pending" href="codigo/matlab/reynolds.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/reynolds.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea01.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s2" class="week">
+    <h3><span class="num">Semana 2</span>Reología: fluidos newtonianos y no newtonianos</h3>
+    <ul class="topics">
+      <li>Ley de viscosidad de Newton; esfuerzo cortante y gradiente de velocidad</li>
+      <li>Fluidos no newtonianos: ley de la potencia, plástico de Bingham, pseudoplásticos y dilatantes</li>
+    </ul>
+    <div class="formula">$$ \tau = \mu\frac{dv}{dy} \qquad\text{(no newtoniano: } \tau = K\left(\tfrac{dv}{dy}\right)^{n}) $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem02-reologia.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem02-reologia.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@TheEfficientEngineer"><span class="ic">▶️</span>Video · viscosidad (Efficient Engineer)</a>
+      <a class="res pending" href="codigo/matlab/reologia.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/reologia.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea02.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 2 ============ -->
+  <div class="block-label">Bloque 2 · Balances de energía mecánica · fluidos incompresibles</div>
+
+  <section id="s3" class="week">
+    <h3><span class="num">Semana 3</span>Ecuación de continuidad</h3>
+    <ul class="topics">
+      <li>Conservación de la masa; gasto másico y volumétrico</li>
+      <li>Continuidad en tuberías y cambios de sección (Çengel cap. 5)</li>
+    </ul>
+    <div class="formula">$$ \dot{m} = \rho\,A\,v = \text{constante} \qquad A_1 v_1 = A_2 v_2 $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem03-continuidad.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem03-continuidad.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Video (LearnChemE)</a>
+      <a class="res pending" href="codigo/matlab/continuidad.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/continuidad.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea03.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s4" class="week">
+    <h3><span class="num">Semana 4</span>Ecuación de Bernoulli y energía mecánica</h3>
+    <ul class="topics">
+      <li>Ecuación de Bernoulli y sus hipótesis</li>
+      <li>Balance de energía mecánica con bomba y pérdidas; línea de energía y piezométrica</li>
+    </ul>
+    <div class="video-embed">
+      <iframe src="https://www.youtube.com/embed/DW4rItB20h4"
+        title="Understanding Bernoulli's Equation — The Efficient Engineer" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <p class="note">Video: “Understanding Bernoulli's Equation”, canal The Efficient Engineer.</p>
+    <div class="formula">$$ \frac{P_1}{\rho g} + \frac{v_1^2}{2g} + z_1 + h_{bomba} = \frac{P_2}{\rho g} + \frac{v_2^2}{2g} + z_2 + h_{L} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem04-bernoulli.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem04-bernoulli.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://youtu.be/DW4rItB20h4"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/bernoulli.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/bernoulli.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea04.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <!-- ★★★ SEMANA DE EJEMPLO COMPLETA (video + fórmula + código MATLAB/Python + todos los recursos) ★★★ -->
+  <section id="s5" class="week">
+    <h3><span class="num">Semana 5</span>Pérdidas mayores: fricción, Moody y Colebrook</h3>
+    <ul class="topics">
+      <li>Ecuación de Darcy-Weisbach; factor de fricción</li>
+      <li>Diagrama de Moody; ecuación de Colebrook-White (implícita)</li>
+      <li>Aproximación explícita de Swamee-Jain (Çengel cap. 8; Crane TP-410)</li>
+    </ul>
+
+    <p class="note">▼ Esta semana está desarrollada por completo como ejemplo del formato.</p>
+
+    <!-- VIDEO real incrustado -->
+    <div class="video-embed">
+      <iframe src="https://www.youtube.com/embed/5glOutYffeM"
+        title="Using a Moody Chart — LearnChemE" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <p class="note">Video: “Using a Moody Chart”, canal LearnChemE.</p>
+
+    <!-- FÓRMULA -->
+    <div class="formula">
+      $$ h_f = f\,\frac{L}{D}\,\frac{v^2}{2g} \qquad\text{(Darcy-Weisbach)} $$
+      $$ \frac{1}{\sqrt{f}} = -2\log_{10}\!\left(\frac{\varepsilon/D}{3.7} + \frac{2.51}{Re\sqrt{f}}\right) \quad\text{(Colebrook-White)} $$
+    </div>
+
+    <!-- CÓDIGO MATLAB / PYTHON -->
+    <div class="code-block">
+      <div class="code-tabs">
+        <button class="active" onclick="showTab(this,'m-cole')">MATLAB</button>
+        <button onclick="showTab(this,'p-cole')">Python</button>
+        <button class="copy" onclick="copyCode(this)">copiar</button>
+      </div>
+      <div class="code-pane active" id="m-cole"><pre><code>function f = colebrook(Re, epsD, tol, maxit)
+% COLEBROOK  Factor de friccion de Darcy (ecuacion de Colebrook-White).
+%   Re    : numero de Reynolds
+%   epsD  : rugosidad relativa  eps/D
+%   Resuelve la ecuacion implicita por iteracion de punto fijo.
+    if nargin < 3, tol = 1e-8; end
+    if nargin < 4, maxit = 100; end
+    if Re < 2300
+        f = 64/Re;                          % regimen laminar
+        return;
+    end
+    f = 0.02;                               % valor inicial
+    for k = 1:maxit
+        rhs = -2*log10(epsD/3.7 + 2.51/(Re*sqrt(f)));
+        f_new = 1/rhs^2;
+        if abs(f_new - f) < tol, f = f_new; break; end
+        f = f_new;
+    end
+end
+
+% --- Uso ---
+Re = 1e5; epsD = 1e-4;
+f = colebrook(Re, epsD);
+fprintf('f = %.5f\n', f);                   % ~ 0.018</code></pre></div>
+      <div class="code-pane" id="p-cole"><pre><code>import math
+
+
+def colebrook(Re, epsD, tol=1e-8, maxit=100):
+    """Factor de friccion de Darcy (Colebrook-White) por iteracion."""
+    if Re < 2300:
+        return 64 / Re                      # regimen laminar
+    f = 0.02                                # valor inicial
+    for _ in range(maxit):
+        rhs = -2 * math.log10(epsD / 3.7 + 2.51 / (Re * math.sqrt(f)))
+        f_new = 1 / rhs**2
+        if abs(f_new - f) < tol:
+            return f_new
+        f = f_new
+    return f
+
+
+if __name__ == "__main__":
+    print(f"f = {colebrook(1e5, 1e-4):.5f}")   # ~ 0.018</code></pre></div>
+    </div>
+
+    <!-- BOTONES DE RECURSOS -->
+    <div class="resources">
+      <a class="res pending" href="notas/sem05-friccion.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem05-friccion.pdf"><span class="ic">📄</span>PDF · diagrama de Moody</a>
+      <a class="res" href="https://youtu.be/5glOutYffeM"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/colebrook.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/colebrook.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea05.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s6" class="week exam">
+    <h3><span class="num">Semana 6</span>Pérdidas menores, accesorios + primer examen parcial</h3>
+    <ul class="topics">
+      <li>Pérdidas menores: coeficiente K y longitud equivalente ($L_e/D$)</li>
+      <li>Tuberías y accesorios (válvulas, codos, expansiones) según Crane</li>
+      <li>Primer examen parcial</li>
+    </ul>
+    <div class="formula">$$ h_{L,\text{menor}} = K\,\frac{v^2}{2g} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem06-accesorios.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem06-guia-parcial1.pdf"><span class="ic">📄</span>Guía de estudio</a>
+      <a class="res pending" href="codigo/python/perdidas_menores.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/sem06-parcial1-resuelto.pdf"><span class="ic">✏️</span>Parcial resuelto</a>
+    </div>
+  </section>
+
+  <section id="s7" class="week">
+    <h3><span class="num">Semana 7</span>Bombas y turbinas</h3>
+    <ul class="topics">
+      <li>Curva característica de la bomba y curva del sistema; punto de operación</li>
+      <li>Carga neta positiva de succión (NPSH) y cavitación</li>
+      <li>Turbinas hidráulicas (Çengel cap. 14)</li>
+    </ul>
+    <div class="formula">$$ NPSH_{disp} = \frac{P_{atm}-P_v}{\rho g} - z_s - h_{L,s} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem07-bombas.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem07-bombas.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Video · bombas (LearnChemE)</a>
+      <a class="res pending" href="codigo/matlab/punto_operacion.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/punto_operacion.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea07.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s8" class="week">
+    <h3><span class="num">Semana 8</span>Diseño de sistemas de bombeo</h3>
+    <ul class="topics">
+      <li>Cálculo de potencia y eficiencia de la bomba</li>
+      <li>Selección de bomba y verificación de cavitación</li>
+    </ul>
+    <div class="formula">$$ \dot{W}_{bomba} = \frac{\rho\, g\, Q\, h_{bomba}}{\eta} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem08-sistemas-bombeo.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem08-sistemas-bombeo.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Video (LearnChemE)</a>
+      <a class="res pending" href="codigo/matlab/potencia_bomba.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/potencia_bomba.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea08.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 3 ============ -->
+  <div class="block-label">Bloque 3 · Balances de energía mecánica · fluidos compresibles</div>
+
+  <section id="s9" class="week">
+    <h3><span class="num">Semana 9</span>Balances de energía para fluidos compresibles</h3>
+    <ul class="topics">
+      <li>Flujo compresible; número de Mach y velocidad del sonido</li>
+      <li>Flujo isotérmico y adiabático en tuberías (Çengel cap. 12)</li>
+    </ul>
+    <div class="formula">$$ Ma = \frac{v}{c}, \qquad c = \sqrt{k\,R\,T} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem09-compresibles.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem09-compresibles.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Video (LearnChemE)</a>
+      <a class="res pending" href="codigo/matlab/flujo_compresible.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/flujo_compresible.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea09.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s10" class="week exam">
+    <h3><span class="num">Semana 10</span>Compresores y expansores + segundo examen parcial</h3>
+    <ul class="topics">
+      <li>Trabajo de compresión: isotérmico, adiabático y politrópico</li>
+      <li>Compresores por etapas; expansores</li>
+      <li>Segundo examen parcial</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem10-compresores.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem10-guia-parcial2.pdf"><span class="ic">📄</span>Guía de estudio</a>
+      <a class="res pending" href="codigo/python/trabajo_compresor.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/sem10-parcial2-resuelto.pdf"><span class="ic">✏️</span>Parcial resuelto</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 4 ============ -->
+  <div class="block-label">Bloque 4 · Flujo de fluidos complejos y multifásico</div>
+
+  <section id="s11" class="week">
+    <h3><span class="num">Semana 11</span>Flujo bifásico: patrones de flujo</h3>
+    <ul class="topics">
+      <li>Flujo de dos fases (gas-líquido); regímenes y patrones de flujo</li>
+      <li>Mapas de patrones (horizontal y vertical): Baker, Mandhane</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem11-bifasico.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem11-bifasico.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Video (LearnChemE)</a>
+      <a class="res pending" href="pdf/tareas/tarea11.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s12" class="week">
+    <h3><span class="num">Semana 12</span>Simulación de flujo bifásico</h3>
+    <ul class="topics">
+      <li>Fracción de vacío (hold-up) y caída de presión bifásica</li>
+      <li>Correlación de Lockhart-Martinelli; simulación en software</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem12-sim-bifasico.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem12-sim-bifasico.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="codigo/matlab/lockhart_martinelli.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/lockhart_martinelli.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea12.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 5 ============ -->
+  <div class="block-label">Bloque 5 · Redes hidráulicas</div>
+
+  <section id="s13" class="week">
+    <h3><span class="num">Semana 13</span>Análisis de redes: método de Hardy Cross</h3>
+    <ul class="topics">
+      <li>Redes de tuberías: nodos, mallas y leyes de conservación</li>
+      <li>Método iterativo de Hardy Cross para el balance de caudales</li>
+    </ul>
+    <div class="formula">$$ \Delta Q = -\frac{\sum h_L}{\sum \left| 2\,h_L / Q \right|} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem13-redes.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem13-redes.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Video (LearnChemE)</a>
+      <a class="res pending" href="codigo/matlab/hardy_cross.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/hardy_cross.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea13.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s14" class="week">
+    <h3><span class="num">Semana 14</span>Simulación de redes hidráulicas</h3>
+    <ul class="topics">
+      <li>Modelado de redes en software (p. ej. EPANET, Pipe Flow Expert)</li>
+      <li>Verificación de presiones y caudales; casos de estudio</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem14-sim-redes.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem14-sim-redes.pdf"><span class="ic">📄</span>Guía de práctica</a>
+      <a class="res" href="https://www.epa.gov/water-research/epanet"><span class="ic">🔧</span>EPANET</a>
+      <a class="res pending" href="pdf/tareas/tarea14.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 6 ============ -->
+  <div class="block-label">Bloque 6 · Dinámica de fluidos computacional</div>
+
+  <section id="s15" class="week">
+    <h3><span class="num">Semana 15</span>Introducción a la dinámica de fluidos computacional (CFD)</h3>
+    <ul class="topics">
+      <li>Ecuaciones de Navier-Stokes y discretización (volumen finito)</li>
+      <li>Mallado, condiciones de frontera y modelos de turbulencia (RANS)</li>
+      <li>Panorama de herramientas: OpenFOAM, ANSYS Fluent, COMSOL</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem15-cfd.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem15-cfd.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/@TheEfficientEngineer"><span class="ic">▶️</span>Video · intro CFD</a>
+      <a class="res" href="https://www.openfoam.com/"><span class="ic">🔧</span>OpenFOAM</a>
+      <a class="res pending" href="pdf/tareas/tarea15.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s16" class="week project">
+    <h3><span class="num">Semana 16</span>Proyecto integrador y examen final</h3>
+    <ul class="topics">
+      <li>Diseño y evaluación de un sistema de tuberías con bombeo (caso de ingeniería química)</li>
+      <li>Presentación del portafolio de evidencias</li>
+      <li>Examen final</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="pdf/sem16-rubrica-proyecto.pdf"><span class="ic">📄</span>Rúbrica del proyecto</a>
+      <a class="res pending" href="pdf/sem16-lineamientos.pdf"><span class="ic">📄</span>Lineamientos</a>
+    </div>
+  </section>
+
+
+  <!-- ============ EVALUACIÓN ============ -->
+  <div class="block-label" id="evaluacion">Evaluación</div>
+  <section class="week">
+    <h3>Criterios de acreditación</h3>
+    <ul class="topics">
+      <li><b>Exámenes</b> (procedimiento, resultado, claridad, orden) — Aula — <b>60%</b></li>
+      <li><b>Portafolio</b> (tareas, casos de estudio, proyectos) — Extramuros — <b>40%</b></li>
+    </ul>
+    <p class="note">Se acredita presentando con idoneidad cada evidencia con un mínimo del 60%, y cumpliendo la asistencia del estatuto de alumnos 2008.</p>
+  </section>
+
+
+  <!-- ============ RECURSOS ============ -->
+  <div class="block-label" id="recursos">Bibliografía y software</div>
+  <section class="week">
+    <h3>Fuentes de información</h3>
+    <ul class="topics">
+      <li>Çengel, Y. A., &amp; Cimbala, J. M. (2018). <i>Mecánica de fluidos: fundamentos y aplicaciones</i> (4.ª ed.). McGraw-Hill.</li>
+      <li>Crane Co. (2011). <i>Flujo de fluidos en válvulas, accesorios y tuberías</i> (TP-410). McGraw-Hill.</li>
+      <li>De las Heras Jiménez, S. (2012). <i>Mecánica de fluidos en ingeniería</i>. Univ. Politècnica de Catalunya.</li>
+      <li>De las Heras Jiménez, S. (2011). <i>Fluidos, bombas e instalaciones hidráulicas</i>. UPC.</li>
+      <li>Wilkes, J. O. (2017). <i>Fluid Mechanics for Chemical Engineers</i> (con CFD y COMSOL). Prentice Hall.</li>
+      <li>Complementarias: Fernández Oro (2012), <i>Técnicas numéricas en Ingeniería de Fluidos</i>; Streeter &amp; Wylie, <i>Mecánica de los fluidos</i>.</li>
+    </ul>
+    <div class="resources">
+      <a class="res" href="https://www.epa.gov/water-research/epanet"><span class="ic">🔧</span>EPANET (redes)</a>
+      <a class="res" href="https://www.openfoam.com/"><span class="ic">🔧</span>OpenFOAM (CFD)</a>
+      <a class="res" href="https://www.python.org/"><span class="ic">🐍</span>Python (NumPy · SciPy)</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Canal LearnChemE</a>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<footer>
+  © 2026 Prof. Fili · Mecánica de Fluidos (QIIA 18004) · Universidad Veracruzana
+</footer>
+
+<!-- =================== SCRIPTS =================== -->
+<script>
+// Cambiar entre pestañas de código (MATLAB / Python)
+function showTab(btn, paneId){
+  const block = btn.closest('.code-block');
+  block.querySelectorAll('.code-tabs button').forEach(b => {
+    if(!b.classList.contains('copy')) b.classList.remove('active');
+  });
+  block.querySelectorAll('.code-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  block.querySelector('#' + paneId).classList.add('active');
+}
+
+// Copiar el código visible del bloque
+function copyCode(btn){
+  const pane = btn.closest('.code-block').querySelector('.code-pane.active code');
+  if(!pane) return;
+  navigator.clipboard.writeText(pane.innerText).then(() => {
+    const prev = btn.textContent;
+    btn.textContent = '¡copiado!';
+    setTimeout(() => btn.textContent = prev, 1400);
+  });
+}
+
+// Resaltar en la barra lateral la semana visible
+const links = document.querySelectorAll('.sidebar a[href^="#s"]');
+const map = {};
+links.forEach(a => { const el = document.querySelector(a.getAttribute('href')); if(el) map[a.getAttribute('href').slice(1)] = a; });
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      links.forEach(a => a.classList.remove('active'));
+      const a = map[e.target.id];
+      if(a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+document.querySelectorAll('section.week[id]').forEach(s => obs.observe(s));
+</script>
+
+</body>
+</html>
