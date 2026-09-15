@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Métodos Numéricos | Prof. Fili — UV</title>
+
+<!-- MathJax: renderiza fórmulas escritas con $...$ (en línea) o $$...$$ (bloque) -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+<style>
+:root{
+  --bg:#111;
+  --bg-soft:#1a1a1a;
+  --card:#1e1e1e;
+  --card-2:#242424;
+  --line:#333;
+  --line-soft:#2a2a2a;
+  --text:#eee;
+  --muted:#9a9a9a;
+  --accent:#39b3a6;        /* teal discreto, guiño a la UV */
+  --accent-dim:#1e6b63;
+  --code-bg:#0d0d0d;
+  --warn:#c9a227;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.55;
+}
+
+a{color:var(--accent);}
+
+/* ---------- TOP NAV ---------- */
+.topnav{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#000;
+  border-bottom:1px solid var(--line);
+  padding:12px 20px;
+  display:flex;
+  gap:22px;
+  align-items:center;
+}
+.topnav a{
+  color:#ccc;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:14px;
+}
+.topnav a:hover{color:#fff;}
+.topnav .brand{color:#fff;margin-left:auto;font-weight:bold;font-size:13px;color:var(--muted);}
+
+/* ---------- HEADER ---------- */
+header.hero{
+  padding:46px 24px 30px;
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(1200px 200px at 15% -40%, rgba(57,179,166,0.10), transparent 60%),
+    var(--bg);
+}
+header.hero .wrap{max-width:1100px;margin:0 auto;}
+header.hero h1{
+  margin:0 0 6px;
+  font-size:38px;
+  letter-spacing:0.3px;
+}
+header.hero .sub{color:var(--muted);margin:0 0 18px;font-size:15px;}
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.chip{
+  border:1px solid var(--line);
+  background:var(--bg-soft);
+  color:#cfcfcf;
+  font-size:12px;
+  padding:5px 10px;
+  border-radius:2px;
+}
+.chip b{color:#fff;font-weight:bold;}
+
+/* ---------- LAYOUT ---------- */
+.container{
+  display:flex;
+  gap:0;
+  max-width:1200px;
+  margin:0 auto;
+  align-items:flex-start;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+  width:270px;
+  flex:0 0 270px;
+  background:var(--bg-soft);
+  border-right:1px solid var(--line);
+  padding:22px 18px;
+  position:sticky;
+  top:49px;
+  height:calc(100vh - 49px);
+  overflow-y:auto;
+}
+.sidebar h3{
+  color:#fff;
+  font-size:12px;
+  letter-spacing:1px;
+  margin:20px 0 8px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--line);
+}
+.sidebar h3:first-child{margin-top:0;}
+.sidebar a{
+  display:block;
+  color:#bbb;
+  text-decoration:none;
+  font-size:13px;
+  padding:5px 8px;
+  border-left:2px solid transparent;
+  border-radius:2px;
+}
+.sidebar a:hover{color:#fff;background:#202020;}
+.sidebar a.active{
+  color:#fff;
+  border-left:2px solid var(--accent);
+  background:#202020;
+}
+.sidebar a .wk{color:var(--muted);font-weight:bold;margin-right:6px;}
+
+/* ---------- MAIN ---------- */
+main{flex:1;padding:34px 40px 80px;min-width:0;}
+
+.intro{
+  border:1px solid var(--line);
+  background:var(--card);
+  padding:20px 22px;
+  margin-bottom:34px;
+  border-radius:3px;
+}
+.intro h2{margin-top:0;}
+.intro code{background:var(--code-bg);padding:2px 6px;border-radius:3px;font-size:13px;color:#e6e6e6;}
+
+/* bloque temático */
+.block-label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:44px 0 14px;
+  color:var(--accent);
+  font-size:13px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.block-label::after{content:"";flex:1;height:1px;background:var(--line);}
+.block-label:first-of-type{margin-top:8px;}
+
+/* ---------- WEEK CARD ---------- */
+.week{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:20px 22px;
+  margin-bottom:16px;
+  scroll-margin-top:70px;
+}
+.week.exam{border-left:3px solid var(--warn);}
+.week.project{border-left:3px solid var(--accent);}
+.week h3{
+  margin:0 0 4px;
+  font-size:19px;
+}
+.week h3 .num{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:bold;
+  margin-right:10px;
+}
+.week .topics{color:#cfcfcf;font-size:14px;margin:8px 0 0;padding-left:18px;}
+.week .topics li{margin-bottom:2px;}
+
+/* botones de recursos */
+.resources{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid var(--line-soft);
+}
+.res{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid #6a6a6a;
+  color:#ddd;
+  text-decoration:none;
+  font-size:12.5px;
+  padding:6px 11px;
+  border-radius:3px;
+  background:#181818;
+}
+.res:hover{background:#fff;color:#000;border-color:#fff;}
+.res.pending{
+  border-style:dashed;
+  border-color:#4a4a4a;
+  color:var(--muted);
+  background:transparent;
+}
+.res.pending:hover{background:#202020;color:#ccc;border-color:#666;}
+.res .ic{font-size:14px;}
+
+/* ---------- VIDEO ---------- */
+.video-embed{
+  position:relative;
+  width:100%;
+  max-width:640px;
+  aspect-ratio:16/9;
+  margin:16px 0 4px;
+  border:1px solid var(--line);
+  border-radius:4px;
+  overflow:hidden;
+  background:#000;
+}
+.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+
+/* ---------- CODE ---------- */
+.code-block{margin:16px 0 6px;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--code-bg);}
+.code-tabs{display:flex;background:#151515;border-bottom:1px solid var(--line);}
+.code-tabs button{
+  background:transparent;border:0;color:var(--muted);
+  padding:9px 16px;font-size:13px;cursor:pointer;font-family:inherit;
+  border-bottom:2px solid transparent;
+}
+.code-tabs button:hover{color:#fff;}
+.code-tabs button.active{color:#fff;border-bottom:2px solid var(--accent);}
+.code-tabs .copy{margin-left:auto;font-size:12px;border-bottom:none;}
+.code-tabs .copy:hover{color:var(--accent);}
+.code-pane{display:none;}
+.code-pane.active{display:block;}
+pre{margin:0;padding:16px 18px;overflow-x:auto;}
+code, pre{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:13px;line-height:1.55;color:#e6e6e6;}
+
+/* formula callout */
+.formula{
+  background:var(--card-2);
+  border-left:3px solid var(--accent-dim);
+  padding:10px 16px;
+  margin:14px 0;
+  border-radius:0 3px 3px 0;
+  overflow-x:auto;
+}
+.note{color:var(--muted);font-size:13px;margin-top:6px;}
+
+details.tpl{
+  border:1px solid var(--line);
+  border-radius:3px;
+  background:var(--bg-soft);
+  padding:0 16px;
+  margin-top:16px;
+}
+details.tpl summary{cursor:pointer;padding:12px 0;font-weight:bold;color:#fff;}
+details.tpl[open]{padding-bottom:14px;}
+
+/* ---------- FOOTER ---------- */
+footer{
+  text-align:center;
+  padding:26px 20px;
+  background:#000;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:860px){
+  .container{flex-direction:column;}
+  .sidebar{
+    width:100%;flex:none;height:auto;position:static;
+    border-right:none;border-bottom:1px solid var(--line);
+  }
+  main{padding:24px 18px 60px;}
+  header.hero h1{font-size:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- =================== NAV =================== -->
+<nav class="topnav">
+  <a href="index.html">← Inicio</a>
+  <a href="momentum.html">Momentum</a>
+  <a href="fluidos.html">Fluidos</a>
+  <a href="numericos.html">Numéricos</a>
+  <span class="brand">Prof. Fili · Universidad Veracruzana</span>
+</nav>
+
+<!-- =================== HEADER =================== -->
+<header class="hero">
+  <div class="wrap">
+    <h1>Métodos Numéricos</h1>
+    <p class="sub">Tronco Común de Ingenierías · Academia de Ciencias Básicas · Modalidad Curso-Taller</p>
+    <div class="meta">
+      <span class="chip">Código <b>TCIN 18004</b></span>
+      <span class="chip"><b>6</b> créditos</span>
+      <span class="chip"><b>2</b> h teoría · <b>2</b> h taller</span>
+      <span class="chip"><b>16</b> semanas</span>
+      <span class="chip">Textos base: <b>Chapra &amp; Canale · Sauer</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- =================== SIDEBAR =================== -->
+<aside class="sidebar">
+  <h3>SEMANAS</h3>
+  <a href="#s1"><span class="wk">S1</span>Errores y punto flotante</a>
+  <a href="#s2"><span class="wk">S2</span>Propagación y convergencia</a>
+  <a href="#s3"><span class="wk">S3</span>Raíces: bisección</a>
+  <a href="#s4"><span class="wk">S4</span>Falsa posición · punto fijo</a>
+  <a href="#s5"><span class="wk">S5</span>Newton-Raphson · secante</a>
+  <a href="#s6"><span class="wk">S6</span>1.ᵉʳ parcial</a>
+  <a href="#s7"><span class="wk">S7</span>Sistemas: Gauss</a>
+  <a href="#s8"><span class="wk">S8</span>Gauss-Jordan · no lineales</a>
+  <a href="#s9"><span class="wk">S9</span>Regresión lineal</a>
+  <a href="#s10"><span class="wk">S10</span>Regresión pol. · Newton</a>
+  <a href="#s11"><span class="wk">S11</span>Lagrange · 2.º parcial</a>
+  <a href="#s12"><span class="wk">S12</span>Derivación numérica</a>
+  <a href="#s13"><span class="wk">S13</span>Integración numérica</a>
+  <a href="#s14"><span class="wk">S14</span>Int. múltiple · EDO I</a>
+  <a href="#s15"><span class="wk">S15</span>EDO II · EDP</a>
+  <a href="#s16"><span class="wk">S16</span>Proyecto · final</a>
+
+  <h3>RECURSOS</h3>
+  <a href="#recursos">Bibliografía</a>
+  <a href="#recursos">Software</a>
+  <a href="#evaluacion">Evaluación</a>
+</aside>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- INTRO / CÓMO USAR -->
+  <section class="intro">
+    <h2>Sobre el curso</h2>
+    <p>Esta experiencia educativa brinda técnicas para formular y resolver, mediante la computadora,
+    problemas matemáticos cuya solución analítica es compleja o imposible. El temario oficial se
+    organiza en 7 bloques de saberes, aquí distribuidos en 16 semanas. Cada semana incluye espacio para
+    <b>notas (.md)</b>, <b>PDF</b>, <b>video</b>, y <b>código en MATLAB y Python</b>.</p>
+
+    <p class="note">Organización de archivos sugerida en el repositorio:</p>
+    <div class="code-block">
+      <div class="code-tabs"><button class="active" disabled>estructura</button></div>
+      <pre><code>uv/
+├── numericos.html
+├── notas/           # apuntes en Markdown por semana  (sem01-errores.md, ...)
+├── pdf/             # lecturas, formularios y tareas    (sem01-errores.pdf, ...)
+└── codigo/
+    ├── matlab/      # scripts .m   (biseccion.m, ...)
+    └── python/      # scripts .py  (biseccion.py, ...)</code></pre>
+    </div>
+
+    <details class="tpl">
+      <summary>▸ Plantilla: cómo agregar los recursos de una semana (copiar y pegar)</summary>
+      <p class="note">Copia este bloque, cámbiale el <code>id</code>, el título y las rutas de archivo.
+      Los botones con borde punteado (<code>class="res pending"</code>) marcan archivos que aún
+      no subes; quítales <code>pending</code> cuando el archivo exista.</p>
+      <div class="code-block">
+        <div class="code-tabs"><button class="active" disabled>HTML</button></div>
+        <pre><code>&lt;section id="s1" class="week"&gt;
+  &lt;h3&gt;&lt;span class="num"&gt;Semana 1&lt;/span&gt;Título del tema&lt;/h3&gt;
+  &lt;ul class="topics"&gt;
+    &lt;li&gt;Subtema A&lt;/li&gt;
+    &lt;li&gt;Subtema B&lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;!-- VIDEO incrustado (cambia el ID de YouTube tras /embed/) --&gt;
+  &lt;div class="video-embed"&gt;
+    &lt;iframe src="https://www.youtube.com/embed/VIDEO_ID"
+      title="Video" allowfullscreen loading="lazy"&gt;&lt;/iframe&gt;
+  &lt;/div&gt;
+
+  &lt;!-- FÓRMULA con MathJax --&gt;
+  &lt;div class="formula"&gt;$$ x_{r} = \frac{a+b}{2} $$&lt;/div&gt;
+
+  &lt;!-- CÓDIGO con pestañas MATLAB / Python --&gt;
+  &lt;div class="code-block"&gt;
+    &lt;div class="code-tabs"&gt;
+      &lt;button class="active" onclick="showTab(this,'m1')"&gt;MATLAB&lt;/button&gt;
+      &lt;button onclick="showTab(this,'p1')"&gt;Python&lt;/button&gt;
+      &lt;button class="copy" onclick="copyCode(this)"&gt;copiar&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="code-pane active" id="m1"&gt;&lt;pre&gt;&lt;code&gt;% tu código .m&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;div class="code-pane" id="p1"&gt;&lt;pre&gt;&lt;code&gt;# tu código .py&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BOTONES de recursos (archivos) --&gt;
+  &lt;div class="resources"&gt;
+    &lt;a class="res" href="notas/sem01.md"&gt;&lt;span class="ic"&gt;📝&lt;/span&gt;Notas .md&lt;/a&gt;
+    &lt;a class="res" href="pdf/sem01.pdf"&gt;&lt;span class="ic"&gt;📄&lt;/span&gt;PDF&lt;/a&gt;
+    &lt;a class="res" href="https://youtu.be/VIDEO_ID"&gt;&lt;span class="ic"&gt;▶️&lt;/span&gt;Video&lt;/a&gt;
+    &lt;a class="res" href="codigo/matlab/archivo.m"&gt;&lt;span class="ic"&gt;🧮&lt;/span&gt;MATLAB&lt;/a&gt;
+    &lt;a class="res" href="codigo/python/archivo.py"&gt;&lt;span class="ic"&gt;🐍&lt;/span&gt;Python&lt;/a&gt;
+    &lt;a class="res pending" href="pdf/tareas/tarea01.pdf"&gt;&lt;span class="ic"&gt;✏️&lt;/span&gt;Tarea&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+      </div>
+    </details>
+  </section>
+
+
+  <!-- ============ BLOQUE 1 ============ -->
+  <div class="block-label">Bloque 1 · Errores y aproximaciones</div>
+
+  <section id="s1" class="week">
+    <h3><span class="num">Semana 1</span>Introducción, modelado y errores de la computadora</h3>
+    <ul class="topics">
+      <li>Qué son los métodos numéricos y el modelo matemático (Chapra cap. 1; Sauer cap. 0)</li>
+      <li>Representación de punto flotante y aritmética de la computadora</li>
+      <li>Errores de redondeo y truncamiento; épsilon de máquina</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem01-errores.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem01-errores.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://youtu.be/2zd-TgHJgVU"><span class="ic">▶️</span>Video · punto flotante (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/epsilon_maquina.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/epsilon_maquina.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea01.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s2" class="week">
+    <h3><span class="num">Semana 2</span>Propagación del error, algoritmos y convergencia</h3>
+    <ul class="topics">
+      <li>Incertidumbre en los datos y propagación del error</li>
+      <li>Error absoluto y error relativo; criterios de paro</li>
+      <li>Algoritmos, estabilidad y convergencia (Sauer cap. 0)</li>
+    </ul>
+    <div class="formula">$$ E_a = |x_{\text{aprox}} - x_{\text{real}}| \qquad E_r = \frac{E_a}{|x_{\text{real}}|} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem02-propagacion.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem02-propagacion.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Video · curso completo (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/error_relativo.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/error_relativo.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea02.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 2 ============ -->
+  <div class="block-label">Bloque 2 · Ecuaciones algebraicas y trascendentes</div>
+
+  <!-- ★★★ SEMANA DE EJEMPLO COMPLETA (video + fórmula + código MATLAB/Python + todos los recursos) ★★★ -->
+  <section id="s3" class="week">
+    <h3><span class="num">Semana 3</span>Raíces: método gráfico y métodos cerrados (bisección)</h3>
+    <ul class="topics">
+      <li>Separación de funciones e interpretación geométrica</li>
+      <li>Métodos iterativos cerrados: tanteo, bisección y falsa posición</li>
+      <li>Teorema de Bolzano y cambio de signo (Chapra cap. 5; Sauer cap. 1)</li>
+    </ul>
+
+    <p class="note">▼ Esta semana está desarrollada por completo como ejemplo del formato.</p>
+
+    <!-- VIDEO real incrustado -->
+    <div class="video-embed">
+      <iframe src="https://www.youtube.com/embed/MlP_W-obuNg"
+        title="Método de bisección — Oscar Veliz" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <p class="note">Video: “Bisection Method”, canal Oscar Veliz.</p>
+
+    <!-- FÓRMULA -->
+    <div class="formula">
+      $$ x_r = \frac{a+b}{2}, \qquad \text{con } f(a)\,f(b) < 0 $$
+      $$ \text{Cota del error tras } n \text{ pasos:}\quad |E_n| \le \frac{b-a}{2^{\,n+1}} $$
+    </div>
+
+    <!-- CÓDIGO MATLAB / PYTHON -->
+    <div class="code-block">
+      <div class="code-tabs">
+        <button class="active" onclick="showTab(this,'m-bis')">MATLAB</button>
+        <button onclick="showTab(this,'p-bis')">Python</button>
+        <button class="copy" onclick="copyCode(this)">copiar</button>
+      </div>
+      <div class="code-pane active" id="m-bis"><pre><code>function [raiz, iter] = biseccion(f, a, b, tol, maxit)
+% BISECCION  Raíz de f en [a,b] por bisección (Chapra, cap. 5).
+%   f     : handle de la función, p. ej. @(x) x.^3 - x - 2
+%   a, b  : extremos del intervalo, deben cumplir f(a)*f(b) < 0
+%   tol   : tolerancia sobre el ancho del intervalo
+%   maxit : número máximo de iteraciones
+    if f(a)*f(b) > 0
+        error('No hay cambio de signo en [a,b].');
+    end
+    iter = 0;
+    while (b - a)/2 > tol && iter < maxit
+        c = (a + b)/2;              % punto medio
+        if f(c) == 0, break; end
+        if f(a)*f(c) < 0
+            b = c;                  % la raíz está en [a,c]
+        else
+            a = c;                  % la raíz está en [c,b]
+        end
+        iter = iter + 1;
+    end
+    raiz = (a + b)/2;
+end
+
+% --- Uso ---
+f = @(x) x.^3 - x - 2;
+[r, n] = biseccion(f, 1, 2, 1e-6, 100);
+fprintf('Raíz ~= %.6f en %d iteraciones\n', r, n);</code></pre></div>
+      <div class="code-pane" id="p-bis"><pre><code>def biseccion(f, a, b, tol=1e-6, maxit=100):
+    """Raíz de f en [a, b] por bisección (Chapra, cap. 5)."""
+    if f(a) * f(b) > 0:
+        raise ValueError("No hay cambio de signo en [a, b].")
+    for i in range(1, maxit + 1):
+        c = (a + b) / 2.0              # punto medio
+        if f(c) == 0 or (b - a) / 2 < tol:
+            return c, i
+        if f(a) * f(c) < 0:
+            b = c                     # la raíz está en [a, c]
+        else:
+            a = c                     # la raíz está en [c, b]
+    return (a + b) / 2.0, maxit
+
+
+if __name__ == "__main__":
+    f = lambda x: x**3 - x - 2
+    raiz, n = biseccion(f, 1, 2)
+    print(f"Raíz ~= {raiz:.6f} en {n} iteraciones")</code></pre></div>
+    </div>
+
+    <!-- BOTONES DE RECURSOS -->
+    <div class="resources">
+      <a class="res pending" href="notas/sem03-biseccion.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem03-biseccion.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://youtu.be/MlP_W-obuNg"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/biseccion.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/biseccion.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea03.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s4" class="week">
+    <h3><span class="num">Semana 4</span>Falsa posición y punto fijo</h3>
+    <ul class="topics">
+      <li>Método de la falsa posición (regula falsi)</li>
+      <li>Iteración de punto fijo y su criterio de convergencia</li>
+    </ul>
+    <div class="formula">$$ x_{i+1} = g(x_i), \qquad \text{converge si } |g'(x)| < 1 $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem04-punto-fijo.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem04-punto-fijo.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://youtu.be/pg1I8AG59Ik"><span class="ic">▶️</span>Video · falsa posición (Oscar Veliz)</a>
+      <a class="res pending" href="codigo/matlab/falsa_posicion.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/punto_fijo.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea04.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s5" class="week">
+    <h3><span class="num">Semana 5</span>Newton-Raphson, secante y aplicaciones</h3>
+    <ul class="topics">
+      <li>Método de Newton-Raphson y su convergencia cuadrática</li>
+      <li>Método de la secante (sin derivada)</li>
+      <li>Aplicaciones de ingeniería con herramientas computacionales</li>
+    </ul>
+    <div class="formula">$$ x_{i+1} = x_i - \frac{f(x_i)}{f'(x_i)} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem05-newton.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem05-newton.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://youtu.be/E24zUEKqgwQ"><span class="ic">▶️</span>Video · Newton (Oscar Veliz)</a>
+      <a class="res pending" href="codigo/matlab/newton_raphson.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/newton_raphson.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea05.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s6" class="week exam">
+    <h3><span class="num">Semana 6</span>Primer examen parcial + taller de repaso</h3>
+    <ul class="topics">
+      <li>Evaluación de errores y raíces de ecuaciones</li>
+      <li>Entrega parcial de portafolio (implementación computacional)</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="pdf/sem06-guia-parcial1.pdf"><span class="ic">📄</span>Guía de estudio</a>
+      <a class="res pending" href="pdf/sem06-parcial1-resuelto.pdf"><span class="ic">✏️</span>Parcial resuelto</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 3 ============ -->
+  <div class="block-label">Bloque 3 · Sistemas de ecuaciones</div>
+
+  <section id="s7" class="week">
+    <h3><span class="num">Semana 7</span>Sistemas lineales: eliminación de Gauss</h3>
+    <ul class="topics">
+      <li>Eliminación gaussiana con sustitución hacia atrás</li>
+      <li>Pivoteo parcial y condicionamiento (Chapra cap. 9; Sauer cap. 2)</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem07-gauss.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem07-gauss.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Video · álgebra lineal numérica (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/gauss.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/gauss.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea07.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s8" class="week">
+    <h3><span class="num">Semana 8</span>Gauss-Jordan y sistemas no lineales</h3>
+    <ul class="topics">
+      <li>Método de Gauss-Jordan y matriz inversa</li>
+      <li>Sistemas no lineales: Newton-Raphson y punto fijo multivariable</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem08-gauss-jordan.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem08-gauss-jordan.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Video (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/gauss_jordan.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/newton_sistemas.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea08.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 4 ============ -->
+  <div class="block-label">Bloque 4 · Regresión e interpolación</div>
+
+  <section id="s9" class="week">
+    <h3><span class="num">Semana 9</span>Regresión lineal por mínimos cuadrados</h3>
+    <ul class="topics">
+      <li>Ajuste por mínimos cuadrados y linealización</li>
+      <li>Coeficiente de determinación $r^2$ (Chapra cap. 17; Sauer cap. 4)</li>
+    </ul>
+    <div class="formula">$$ m = \frac{n\sum x_iy_i - \sum x_i \sum y_i}{n\sum x_i^2 - (\sum x_i)^2} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem09-regresion.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem09-regresion.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Video (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/minimos_cuadrados.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/minimos_cuadrados.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea09.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s10" class="week">
+    <h3><span class="num">Semana 10</span>Regresión polinomial e interpolación de Newton</h3>
+    <ul class="topics">
+      <li>Regresión polinomial</li>
+      <li>Interpolación por diferencias divididas de Newton</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem10-interp-newton.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem10-interp-newton.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Video (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/interp_newton.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/interp_newton.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea10.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s11" class="week exam">
+    <h3><span class="num">Semana 11</span>Interpolación de Lagrange + segundo examen parcial</h3>
+    <ul class="topics">
+      <li>Polinomios de Lagrange</li>
+      <li>Evaluación: sistemas de ecuaciones, regresión e interpolación</li>
+    </ul>
+    <div class="formula">$$ P(x) = \sum_{i=0}^{n} y_i \prod_{j\neq i} \frac{x - x_j}{x_i - x_j} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem11-lagrange.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem11-guia-parcial2.pdf"><span class="ic">📄</span>Guía de estudio</a>
+      <a class="res pending" href="codigo/python/interp_lagrange.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/sem11-parcial2-resuelto.pdf"><span class="ic">✏️</span>Parcial resuelto</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 5 ============ -->
+  <div class="block-label">Bloque 5 · Derivación numérica</div>
+
+  <section id="s12" class="week">
+    <h3><span class="num">Semana 12</span>Derivación numérica por diferencias finitas</h3>
+    <ul class="topics">
+      <li>Diferencias finitas de primer orden (adelante, atrás, centrada)</li>
+      <li>Diferencias finitas de orden superior (Chapra cap. 23; Sauer cap. 5)</li>
+    </ul>
+    <div class="formula">$$ f'(x) \approx \frac{f(x+h) - f(x-h)}{2h} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem12-derivacion.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem12-derivacion.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Video (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/diferencias_finitas.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/diferencias_finitas.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea12.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 6 ============ -->
+  <div class="block-label">Bloque 6 · Integración numérica</div>
+
+  <section id="s13" class="week">
+    <h3><span class="num">Semana 13</span>Integración: trapecio, Simpson y punto medio</h3>
+    <ul class="topics">
+      <li>Regla del trapecio (simple y compuesta)</li>
+      <li>Reglas de Simpson 1/3 y 3/8; regla del punto medio</li>
+    </ul>
+    <div class="formula">$$ \int_a^b f(x)\,dx \approx \frac{h}{3}\Big[f_0 + 4\!\!\sum_{i\,\text{impar}}\!\!f_i + 2\!\!\sum_{i\,\text{par}}\!\!f_i + f_n\Big] $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem13-integracion.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem13-integracion.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Video (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/simpson.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/simpson.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea13.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 7 ============ -->
+  <div class="block-label">Bloque 7 · Ecuaciones diferenciales</div>
+
+  <section id="s14" class="week">
+    <h3><span class="num">Semana 14</span>Integración múltiple + EDO: Euler y Heun</h3>
+    <ul class="topics">
+      <li>Integración múltiple</li>
+      <li>Problemas de condición inicial: métodos de Euler y de Heun</li>
+    </ul>
+    <div class="formula">$$ y_{i+1} = y_i + h\,f(x_i, y_i) \quad \text{(Euler)} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/sem14-edo-euler.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem14-edo-euler.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://youtu.be/WMQ2Cac4sqw"><span class="ic">▶️</span>Video · método de Euler (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/euler.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/euler.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea14.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s15" class="week">
+    <h3><span class="num">Semana 15</span>Runge-Kutta, problemas de frontera y EDP</h3>
+    <ul class="topics">
+      <li>Métodos de Runge-Kutta (RK4)</li>
+      <li>Problemas de condición de frontera y método del disparo</li>
+      <li>EDP por diferencias finitas (Chapra parte 7–8; Sauer cap. 6–8)</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/sem15-rk-edp.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/sem15-rk-edp.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Video · RK y EDP (Chasnov)</a>
+      <a class="res pending" href="codigo/matlab/runge_kutta.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/runge_kutta.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/tarea15.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s16" class="week project">
+    <h3><span class="num">Semana 16</span>Proyecto integrador y examen final</h3>
+    <ul class="topics">
+      <li>Resolución de un problema de aplicación orientado al perfil de cada ingeniería</li>
+      <li>Presentación del proyecto integrador (implementación computacional)</li>
+      <li>Tercer examen parcial / evaluación final</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="pdf/sem16-rubrica-proyecto.pdf"><span class="ic">📄</span>Rúbrica del proyecto</a>
+      <a class="res pending" href="pdf/sem16-lineamientos.pdf"><span class="ic">📄</span>Lineamientos</a>
+    </div>
+  </section>
+
+
+  <!-- ============ EVALUACIÓN ============ -->
+  <div class="block-label" id="evaluacion">Evaluación</div>
+  <section class="week">
+    <h3>Criterios de acreditación</h3>
+    <ul class="topics">
+      <li><b>Exámenes</b> parciales resueltos con claridad — <b>50%</b></li>
+      <li><b>Portafolio</b> (trabajos, tareas e implementación computacional) — <b>30%</b></li>
+      <li><b>Resolución de un problema de aplicación</b> — <b>20%</b></li>
+    </ul>
+    <p class="note">Se acredita con un mínimo del 60% en promedio de cada evidencia y cumpliendo la asistencia del estatuto de alumnos 2008.</p>
+  </section>
+
+
+  <!-- ============ RECURSOS ============ -->
+  <div class="block-label" id="recursos">Bibliografía y software</div>
+  <section class="week">
+    <h3>Fuentes de información</h3>
+    <ul class="topics">
+      <li>Chapra, S. C., &amp; Canale, R. P. (2015). <i>Métodos numéricos para ingenieros</i> (7.ª ed.). McGraw-Hill.</li>
+      <li>Sauer, T. (2018). <i>Numerical Analysis</i> (3.ª ed.). Pearson. <span class="note">(texto de apoyo)</span></li>
+      <li>Burden, R. L., &amp; Faires, J. D. (2017). <i>Análisis numérico</i> (10.ª ed.). Cengage.</li>
+      <li>Mathews, J. H., &amp; Fink, K. D. (2004). <i>Numerical Methods Using MATLAB</i> (4.ª ed.). Pearson.</li>
+      <li>Infante del Río &amp; Rey Cabezas (2015). <i>Métodos numéricos: teoría, problemas y prácticas con MATLAB</i>. Pirámide.</li>
+    </ul>
+    <div class="resources">
+      <a class="res" href="https://www.mathworks.com/products/matlab.html"><span class="ic">🧮</span>MATLAB / GNU Octave</a>
+      <a class="res" href="https://www.python.org/"><span class="ic">🐍</span>Python (NumPy · SciPy)</a>
+      <a class="res" href="https://www.youtube.com/playlist?list=PLidiQIHRzpXJv1e9te7OKEHGx8_Qj5RgC"><span class="ic">▶️</span>Curso Chasnov (HKUST)</a>
+      <a class="res" href="https://www.youtube.com/OscarVeliz"><span class="ic">▶️</span>Canal Oscar Veliz</a>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<footer>
+  © 2026 Prof. Fili · Métodos Numéricos (TCIN 18004) · Universidad Veracruzana
+</footer>
+
+<!-- =================== SCRIPTS =================== -->
+<script>
+// Cambiar entre pestañas de código (MATLAB / Python)
+function showTab(btn, paneId){
+  const block = btn.closest('.code-block');
+  block.querySelectorAll('.code-tabs button').forEach(b => {
+    if(!b.classList.contains('copy')) b.classList.remove('active');
+  });
+  block.querySelectorAll('.code-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  block.querySelector('#' + paneId).classList.add('active');
+}
+
+// Copiar el código visible del bloque
+function copyCode(btn){
+  const pane = btn.closest('.code-block').querySelector('.code-pane.active code');
+  if(!pane) return;
+  navigator.clipboard.writeText(pane.innerText).then(() => {
+    const prev = btn.textContent;
+    btn.textContent = '¡copiado!';
+    setTimeout(() => btn.textContent = prev, 1400);
+  });
+}
+
+// Resaltar en la barra lateral la semana visible
+const links = document.querySelectorAll('.sidebar a[href^="#s"]');
+const map = {};
+links.forEach(a => { const el = document.querySelector(a.getAttribute('href')); if(el) map[a.getAttribute('href').slice(1)] = a; });
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      links.forEach(a => a.classList.remove('active'));
+      const a = map[e.target.id];
+      if(a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+document.querySelectorAll('section.week[id]').forEach(s => obs.observe(s));
+</script>
+
+</body>
+</html>
