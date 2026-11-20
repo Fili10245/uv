@@ -48,40 +48,55 @@ El sitio sigue una arquitectura tipo plataforma educativa:
   Portal de entrada con acceso a cada curso  
 
 - **Páginas por curso**  
-  - `momentum.html`  
+  - `FTMomentum.html`  
   - `fluidos.html`  
+  - `reactores.html`  
   - `numericos.html`  
 
 Cada curso incluye:
 
 - Organización por semanas  
-- Material en Markdown (`.md`)  
-- Espacio para PDFs, tareas y recursos  
+- Notas (`.md`), PDF, video y código MATLAB/Python  
+- Bibliografía, software y criterios de evaluación  
 
 ---
 
+## 📁 Estructura del repositorio
+
+```
+uv/
+├── index.html          # portada con acceso a cada curso
+├── FTMomentum.html
+├── fluidos.html
+├── reactores.html
+├── numericos.html
+├── CauchyDeriv.png
+│
+├── assets/
+│   ├── style.css       # estilos compartidos por TODAS las páginas
+│   └── site.js         # pestañas de código, copiar, resaltado de semana
+│
+├── codigo/
+│   ├── matlab/         # scripts .m
+│   └── python/         # scripts .py
+│
+├── notas/              # (por crear) apuntes .md por semana
+└── pdf/                # (por crear) lecturas, guías y tareas
 ```
 
-uv/
-│
-├── index.html
-├── momentum.html
-├── fluidos.html
-├── numericos.html
-│
-├── transferencia-calor-masa.md
-├── fenomenos-superficie.md
-├── simulacion-optimizacion.md
-│
-├── images/
-└── pdf/
-```
+### Agregar un recurso
+
+Los botones con borde punteado (`class="res pending"`) aparecen como
+**“próximamente”** y no son clicables. Al subir el archivo correspondiente,
+quita `pending` de la clase del botón para activarlo.
+
 ---
 
 ## ⚙️ Tecnologías utilizadas
 
 - HTML5  
-- CSS (diseño minimalista oscuro + hero claro)  
+- CSS compartido (`assets/style.css`) · diseño oscuro con acento teal  
+- MathJax para fórmulas  
 - GitHub Pages  
 
 ---
@@ -121,8 +136,3 @@ El sitio se publica automáticamente mediante GitHub Pages desde la rama `main`.
 ## 📄 Licencia
 
 Uso educativo.
-
-
-
-
-## 📁 Estructura del repositorio

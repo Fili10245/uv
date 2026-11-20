@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ingeniería de Reactores II | Prof. Fili — UV</title>
+
+<!-- MathJax: renderiza fórmulas escritas con $...$ (en línea) o $$...$$ (bloque) -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+<link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<!-- =================== NAV =================== -->
+<nav class="topnav">
+  <a href="index.html">← Inicio</a>
+  <a href="FTMomentum.html">Momentum</a>
+  <a href="fluidos.html">Fluidos</a>
+  <a href="reactores.html">Reactores II</a>
+  <a href="numericos.html">Numéricos</a>
+  <span class="brand">Prof. Fili · Universidad Veracruzana</span>
+</nav>
+
+<!-- =================== HEADER =================== -->
+<header class="hero">
+  <div class="wrap">
+    <h1>Ingeniería de Reactores II</h1>
+    <p class="sub">Licenciatura en Ingeniería Química · Facultad de Ciencias Químicas · Academia de Ingeniería Aplicada · Modalidad Curso-Taller</p>
+    <div class="meta">
+      <span class="chip">Código <b>QIIA 18010</b></span>
+      <span class="chip"><b>6</b> créditos</span>
+      <span class="chip"><b>2</b> h teoría · <b>2</b> h práctica</span>
+      <span class="chip"><b>16</b> semanas</span>
+      <span class="chip">Textos base: <b>Fogler · Froment</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- =================== SIDEBAR =================== -->
+<aside class="sidebar">
+  <h3>SEMANAS</h3>
+  <a href="#s0"><span class="wk">S0</span>Repaso: estequiometría</a>
+  <a href="#s1"><span class="wk">S1</span>Balances de moles y energía</a>
+  <a href="#s2"><span class="wk">S2</span>Operación adiabática</a>
+  <a href="#s3"><span class="wk">S3</span>Intercambio de calor</a>
+  <a href="#s4"><span class="wk">S4</span>1.ᵉʳ parcial</a>
+  <a href="#s5"><span class="wk">S5</span>Lotes no isotérmicos</a>
+  <a href="#s6"><span class="wk">S6</span>Arranque de un CSTR</a>
+  <a href="#s7"><span class="wk">S7</span>Multiplicidad y estabilidad</a>
+  <a href="#s8"><span class="wk">S8</span>PFR transitorio</a>
+  <a href="#s9"><span class="wk">S9</span>Distribución de t. de residencia</a>
+  <a href="#s10"><span class="wk">S10</span>Mezclado · modelos de flujo</a>
+  <a href="#s11"><span class="wk">S11</span>2.º parcial</a>
+  <a href="#s12"><span class="wk">S12</span>Catálisis heterogénea</a>
+  <a href="#s13"><span class="wk">S13</span>Lecho empacado</a>
+  <a href="#s14"><span class="wk">S14</span>Lecho fluidizado · desactivación</a>
+  <a href="#s15"><span class="wk">S15</span>Reactores biológicos</a>
+  <a href="#s16"><span class="wk">S16</span>Proyecto · final</a>
+
+  <h3>RECURSOS</h3>
+  <a href="#recursos">Bibliografía</a>
+  <a href="#recursos">Software</a>
+  <a href="#evaluacion">Evaluación</a>
+</aside>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <h2>Sobre el curso</h2>
+    <p>La Ingeniería de Reactores integra la termodinámica, la cinética química, la mecánica de fluidos y
+    los fenómenos de transporte para analizar las reacciones químicas en los procesos. En esta experiencia
+    educativa diseñarás <b>reactores no isotérmicos, no ideales y heterogéneos</b>, formulando modelos
+    matemáticos y resolviéndolos con software especializado.</p>
+    <p class="note"><b>Unidad de competencia:</b> la/el estudiante diseña reactores químicos heterogéneos y no
+    ideales, formulando modelos matemáticos apropiados y utilizando software especializado para el análisis de
+    problemas complejos, con el fin de aportar soluciones que mejoren la productividad y eficiencia de los
+    procesos, asumiendo una actitud colaborativa con plena responsabilidad y compromiso.</p>
+  </section>
+
+
+  <!-- ============ SECCIÓN 0 ============ -->
+  <div class="block-label">Sección 0 · Repaso</div>
+
+  <section id="s0" class="week">
+    <h3><span class="num">Sección 0</span>Repaso: tablas estequiométricas y conversión</h3>
+    <p>En todo el curso escribiremos los moles (o flujos) de cada especie en función de una sola variable:
+    la <b>conversión X del reactivo limitante A</b>. Si conoces X, conoces la composición completa del reactor.</p>
+
+    <h4>1. La reacción escrita por mol de A</h4>
+    <div class="formula">$$ aA + bB \longrightarrow cC + dD \qquad\Longrightarrow\qquad A + \frac{b}{a}B \longrightarrow \frac{c}{a}C + \frac{d}{a}D $$</div>
+    <p>Se divide entre $a$ para que la reacción diga qué pasa <i>por cada mol de A</i> que reacciona.
+    La conversión es la fracción de A alimentado que ha reaccionado:</p>
+    <div class="formula">$$ X = \frac{\text{moles de A que reaccionaron}}{\text{moles de A alimentados}} = \frac{N_{A0} - N_A}{N_{A0}} \qquad\Rightarrow\qquad \text{reaccionaron } N_{A0}X \text{ moles de A} $$</div>
+
+    <h4>2. Tabla estequiométrica (sistema por lotes)</h4>
+    <p>Para cada especie: <b>moles al tiempo t = moles iniciales + formados − consumidos</b>.</p>
+    <div class="table-wrap">
+      <table class="stoich">
+        <tr><th>Especie</th><th>Inicial</th><th>Cambio</th><th>Al tiempo $t$</th></tr>
+        <tr><td>A</td><td>$N_{A0}$</td><td>$-N_{A0}X$</td><td>$N_{A0}(1 - X)$</td></tr>
+        <tr><td>B</td><td>$N_{B0} = \Theta_B N_{A0}$</td><td>$-\frac{b}{a}N_{A0}X$</td><td>$N_{A0}\left(\Theta_B - \frac{b}{a}X\right)$</td></tr>
+        <tr><td>C</td><td>$N_{C0} = \Theta_C N_{A0}$</td><td>$+\frac{c}{a}N_{A0}X$</td><td>$N_{A0}\left(\Theta_C + \frac{c}{a}X\right)$</td></tr>
+        <tr><td>D</td><td>$N_{D0} = \Theta_D N_{A0}$</td><td>$+\frac{d}{a}N_{A0}X$</td><td>$N_{A0}\left(\Theta_D + \frac{d}{a}X\right)$</td></tr>
+        <tr><td>I (inerte)</td><td>$N_{I0} = \Theta_I N_{A0}$</td><td>$0$</td><td>$N_{A0}\,\Theta_I$</td></tr>
+        <tr class="total"><td>Total</td><td>$N_{T0}$</td><td>$\delta\,N_{A0}X$</td><td>$N_T = N_{T0} + \delta\,N_{A0}X$</td></tr>
+      </table>
+    </div>
+    <p class="note">$\delta = \frac{d}{a} + \frac{c}{a} - \frac{b}{a} - 1$ es el cambio en el número total de moles por mol de A que reacciona.</p>
+
+    <h4>3. Las variables $\Theta_i$ y $\nu_i$</h4>
+    <div class="formula">
+      $$ \Theta_i = \frac{N_{i0}}{N_{A0}} = \frac{F_{i0}}{F_{A0}} = \frac{C_{i0}}{C_{A0}} = \frac{y_{i0}}{y_{A0}} $$
+      $$ \nu_A = -1, \qquad \nu_B = -\frac{b}{a}, \qquad \nu_C = +\frac{c}{a}, \qquad \nu_D = +\frac{d}{a}, \qquad \nu_I = 0 $$
+    </div>
+    <ul class="topics">
+      <li>$\Theta_i$ dice <b>con cuánto de la especie $i$ se empezó, por mol de A</b>. Siempre $\Theta_A = 1$; para un producto que no se alimenta, $\Theta_i = 0$.</li>
+      <li>$\nu_i$ es el coeficiente estequiométrico por mol de A: <b>negativo</b> para reactivos (se consumen) y <b>positivo</b> para productos (se forman).</li>
+      <li>A es el reactivo limitante si, para todo otro reactivo, $\Theta_i \ge |\nu_i|$; por ejemplo, $\Theta_B \ge b/a$.</li>
+    </ul>
+
+    <h4>4. La ecuación compacta</h4>
+    <p>Todas las filas de la tabla tienen la misma forma; solo cambian $\Theta_i$ y $\nu_i$:</p>
+    <div class="formula">$$ \boxed{\,N_i = N_{A0}\,(\Theta_i + \nu_i X)\,} \qquad\qquad \text{sistemas de flujo:}\quad F_i = F_{A0}\,(\Theta_i + \nu_i X) $$</div>
+    <ul class="topics">
+      <li><b>Fase líquida</b> (volumen o flujo volumétrico constante): $\;C_i = C_{A0}\,(\Theta_i + \nu_i X)$</li>
+      <li><b>Fase gas</b> (volumen variable): $\;C_i = C_{A0}\,\dfrac{\Theta_i + \nu_i X}{1 + \varepsilon X}\,\dfrac{P}{P_0}\,\dfrac{T_0}{T}$, con $\varepsilon = y_{A0}\,\delta$.
+      Observa el factor $T_0/T$: en reactores no isotérmicos la temperatura también cambia las concentraciones.</li>
+    </ul>
+
+    <h4>5. Ejemplo numérico</h4>
+    <p>Reacción $A + 2B \longrightarrow 3C$. Se cargan 10 mol de A, 25 mol de B y nada de C; la conversión llega a $X = 0.6$.</p>
+    <div class="formula">
+      $$ \Theta_A = 1,\quad \Theta_B = \tfrac{25}{10} = 2.5,\quad \Theta_C = 0 \qquad\qquad \nu_A = -1,\quad \nu_B = -2,\quad \nu_C = +3 $$
+      $$ N_A = 10\,(1 - 0.6) = 4 \text{ mol}, \qquad N_B = 10\,(2.5 - 2 \times 0.6) = 13 \text{ mol}, \qquad N_C = 10\,(0 + 3 \times 0.6) = 18 \text{ mol} $$
+    </div>
+    <p class="note">Comprobación: reaccionaron 6 mol de A, que consumieron 12 mol de B (25 → 13) y formaron 18 mol de C.</p>
+
+    <h4>6. Dónde la usaremos en Reactores II</h4>
+    <ul class="topics">
+      <li><b>Ley de velocidad en función de X:</b> con $C_i(X)$ se escribe $-r_A$ en términos de la conversión y se combina con el balance de moles.</li>
+      <li><b>Balance de energía:</b> el término $\sum \Theta_i C_{p_i}$ usa los mismos $\Theta_i$. Por ejemplo, en el CSTR del óxido de propileno (semana 6):
+      $\Theta_B = 1000/80 = 12.5$ y $\Theta_M = 100/80 = 1.25$, así que
+      $\sum \Theta_i C_{p_i} = 35 + 12.5(18) + 1.25(19.5) = 284.4$ Btu/(lb-mol·°F).</li>
+      <li><b>Cuidado:</b> la ecuación vale para <b>una sola reacción</b>. Con varias reacciones simultáneas (como el biodiésel del ejercicio 3 de la semana 5) se escriben balances por especie.</li>
+    </ul>
+    <p class="note">Fuente: Fogler (2016), cap. 4 “Stoichiometry”, sección 4.1 y Tabla 4-1.</p>
+
+    <div class="resources">
+      <a class="res" href="pdf/reactores/ecuacion_estequiometrica.pdf"><span class="ic">📄</span>PDF · La ecuación estequiométrica paso a paso</a>
+      <a class="res pending" href="notas/reactores-sem00-estequiometria.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 1 ============ -->
+  <div class="block-label">Bloque 1 · Reactores no isotérmicos en estado estacionario</div>
+
+  <section id="s1" class="week">
+    <h3><span class="num">Semana 1</span>Balances de moles y de energía en reactores</h3>
+    <ul class="topics">
+      <li>Primera ley de la termodinámica aplicada a sistemas reaccionantes</li>
+      <li>Calor de reacción y su dependencia con la temperatura</li>
+      <li>Balance de moles y balance de energía en estado estacionario (Fogler cap. 2 y 11)</li>
+    </ul>
+
+    <p>En un reactor no isotérmico hay que resolver <b>dos balances a la vez</b>. El balance de moles da
+    la conversión, pero la velocidad depende de la temperatura a través de $k(T)$; el balance de energía da
+    la temperatura, pero el calor generado depende de cuánto ha reaccionado. Por eso X y T están acopladas.</p>
+
+    <p class="note">Balance general de moles: $\;F_{A0} - F_A + \displaystyle\int^{V} r_A\,dV = \frac{dN_A}{dt}$</p>
+
+    <h4>1. Estado estacionario</h4>
+    <div class="pair">
+      <div>
+        <h5>Balance de moles</h5>
+        $$ \text{CSTR:}\quad V = \frac{F_{A0}X}{-r_A} $$
+        $$ \text{PFR:}\quad F_{A0}\frac{dX}{dV} = -r_A $$
+      </div>
+      <div>
+        <h5>Balance de energía</h5>
+        $$ \dot Q - \dot W_s - F_{A0}\sum \Theta_i C_{p_i}(T - T_{0}) - \big[\Delta H^\circ_{Rx}(T_R) + \Delta C_p (T - T_R)\big] F_{A0} X = 0 $$
+        <p>Para el CSTR, con $F_{A0}X = -r_A V$ y $\Delta C_p \approx 0$:</p>
+        $$ \dot Q - \dot W_s - F_{A0}\sum \Theta_i C_{p_i}(T - T_{0}) + (r_A V)\,\Delta H_{Rx} = 0 $$
+      </div>
+    </div>
+    <p class="note">Fogler, Ec. 11-27 y 12-12.</p>
+
+    <h4>2. Estado no estacionario (dinámico)</h4>
+    <p>Cuando el reactor arranca, se para o sufre una perturbación, aparecen los términos de acumulación.
+    Estas son las ecuaciones que resolveremos en el Bloque 2 (semanas 5 a 8).</p>
+
+    <div class="pair">
+      <div>
+        <h5>Balance de moles · lotes</h5>
+        $$ N_{A0}\frac{dX}{dt} = -r_A V $$
+      </div>
+      <div>
+        <h5>Balance de energía · lotes</h5>
+        $$ \frac{dT}{dt} = \frac{\dot Q_g - \dot Q_r}{N_{A0}\left(\sum \Theta_i C_{p_i} + \Delta C_p X\right)} $$
+        $$ \dot Q_g = (-r_A V)(-\Delta H_{Rx}), \qquad \dot Q_r = \dot m_c C_{P_c}(T - T_{a1})\left[1 - e^{-UA/\dot m_c C_{P_c}}\right] $$
+      </div>
+    </div>
+
+    <div class="pair">
+      <div>
+        <h5>Balance de moles · CSTR</h5>
+        $$ \frac{dC_A}{dt} = \frac{C_{A0} - C_A}{\tau} + r_A $$
+        $$ \frac{dC_j}{dt} = \frac{C_{j0} - C_j}{\tau} + r_j $$
+        <p class="note">Con $V$ y $v_0$ constantes; $\tau = V/v_0$.</p>
+      </div>
+      <div>
+        <h5>Balance de energía · CSTR (y semilotes)</h5>
+        $$ \frac{dT}{dt} = \frac{\dot Q - \dot W_s - \sum F_{i0}C_{p_i}(T - T_{i0}) + (-\Delta H_{Rx})(-r_A V)}{\sum N_i C_{p_i}} $$
+        <p>Con $\dot Q = -\dot Q_r$ del serpentín (semana 3), $\dot W_s \approx 0$ y $\sum N_i C_{p_i} = V\sum C_i C_{p_i}$.</p>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div>
+        <h5>Balance de moles · PFR</h5>
+        $$ \frac{\partial C_A}{\partial t} = -v_0\,\frac{\partial C_A}{\partial V} + r_A $$
+        <p class="note">Ecuación diferencial parcial: $C_A$ depende del tiempo y de la posición.</p>
+      </div>
+      <div>
+        <h5>Balance de energía · PFR</h5>
+        $$ \frac{\partial T}{\partial t} = -v_0\,\frac{\partial T}{\partial V} + \frac{(-\Delta H_{Rx})(-r_A) - Ua\,(T - T_a)}{\rho c_p} $$
+        <p class="note">Con $\rho c_p$ constante; se resuelve discretizando en celdas (semana 8).</p>
+      </div>
+    </div>
+    <p class="note">Fogler, Ec. 13-9, 13-12 y 13-16 (lotes, CSTR y semilotes). Para el PFR, ver el problema de la semana 8.</p>
+
+    <p class="note">En todos los casos, el acoplamiento es $-r_A = k(T)\,C_A$ con $k(T) = k_1 \exp\!\left[\frac{E}{R}\left(\frac{1}{T_1} - \frac{1}{T}\right)\right]$,
+    y $C_A$ en función de X sale de la tabla estequiométrica (Sección 0).</p>
+
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem01-balance-energia.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores/sem01-balance-energia.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="pdf/reactores/tarea01.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s2" class="week">
+    <h3><span class="num">Semana 2</span>Operación adiabática</h3>
+    <ul class="topics">
+      <li>Relación conversión–temperatura en reactores adiabáticos</li>
+      <li>Conversión de equilibrio y temperatura adiabática</li>
+      <li>Reactores en serie con enfriamiento entre etapas</li>
+    </ul>
+    <div class="formula">$$ X_{EB} = \frac{\sum \Theta_i C_{p_i}\,(T - T_0)}{-\Delta H_{Rx}} \qquad\Longleftrightarrow\qquad T = T_0 + \frac{(-\Delta H_{Rx})\,X}{\sum \Theta_i C_{p_i}} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem02-adiabatica.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores/sem02-adiabatica.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/python/pfr_adiabatico.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/reactores/tarea02.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s3" class="week">
+    <h3><span class="num">Semana 3</span>Operación no adiabática: intercambio de calor</h3>
+    <ul class="topics">
+      <li>CSTR con camisa o serpentín: balance en el fluido de enfriamiento</li>
+      <li>Cuándo es válida la simplificación $\dot Q = UA\,(T_a - T)$</li>
+      <li>PFR y PBR con intercambio de calor: refrigerante en co-corriente y contracorriente</li>
+    </ul>
+
+    <h4>1. CSTR con serpentín o camisa</h4>
+    <p>El refrigerante entra al serpentín a $T_{a1}$ con flujo másico $\dot m_c$ y sale a $T_{a2}$. Con el
+    reactor a temperatura uniforme $T$, el calor que el intercambiador <b>agrega</b> al reactor es
+    (Fogler, Ec. 12-13):</p>
+    <div class="formula">$$ \dot Q = \frac{UA\,(T_{a1} - T_{a2})}{\ln\!\left[\dfrac{T - T_{a1}}{T - T_{a2}}\right]} $$</div>
+
+    <p><b>Balance de energía en el refrigerante</b> (estado cuasi-estacionario, $dT_a/dt \approx 0$):
+    lo que entra con el flujo − lo que sale con el flujo − el calor transferido al reactor = 0.</p>
+    <div class="formula">$$ \dot m_c C_{P_c}(T_{a1} - T_R) - \dot m_c C_{P_c}(T_{a2} - T_R) - \frac{UA\,(T_{a1} - T_{a2})}{\ln\!\left[\dfrac{T - T_{a1}}{T - T_{a2}}\right]} = 0 \quad\Rightarrow\quad \dot Q = \dot m_c C_{P_c}(T_{a1} - T_{a2}) $$</div>
+
+    <div class="pair">
+      <div>
+        <h5>Temperatura de salida del refrigerante</h5>
+        $$ T_{a2} = T - (T - T_{a1})\exp\!\left(-\frac{UA}{\dot m_c C_{P_c}}\right) $$
+        <p class="note">Fogler, Ec. 12-17.</p>
+      </div>
+      <div>
+        <h5>Calor intercambiado (forma general)</h5>
+        $$ \dot Q = \dot m_c C_{P_c}(T_{a1} - T)\left[1 - \exp\!\left(-\frac{UA}{\dot m_c C_{P_c}}\right)\right] $$
+        <p class="note">Fogler, Ec. 12-19. Como calor <i>removido</i>: $\dot Q_r = -\dot Q = \dot m_c C_{P_c}(T - T_{a1})\left[1 - e^{-UA/\dot m_c C_{P_c}}\right]$.</p>
+      </div>
+    </div>
+
+    <h4>2. ¿Cuándo se puede usar $\dot Q = UA\,(T_a - T)$?</h4>
+    <p>Si el flujo de refrigerante es grande, el exponente $x = UA/(\dot m_c C_{P_c})$ es pequeño y
+    $e^{-x} \approx 1 - x$. Entonces $1 - e^{-x} \approx x$ y la forma general se reduce a (Fogler, Ec. 12-20):</p>
+    <div class="formula">$$ \dot Q \approx UA\,(T_a - T), \qquad T_{a1} \approx T_{a2} \approx T_a $$</div>
+
+    <div class="callout">
+      <b>Condición de validez:</b> $\dfrac{UA}{\dot m_c C_{P_c}} \ll 1$, es decir, el refrigerante casi no se calienta a su paso.
+      Como regla práctica, con $x \le 0.1$ el error es menor al 5%
+      ($1 - e^{-0.1} = 0.095$ contra $0.1$). Si $x$ no es pequeño, la forma simplificada <b>sobreestima</b> el calor removido.
+    </div>
+
+    <p><b>Ejemplo</b> (CSTR del óxido de propileno, semana 6): $UA = 16\,000$ Btu/(h·°F) y
+    $\dot m_c C_{P_c} = 1000 \times 18 = 18\,000$ Btu/(h·°F), así que $x = 0.889$.
+    Aquí $1 - e^{-0.889} = 0.589$, mientras que la simplificación usaría $0.889$: sobreestimaría el calor removido
+    en <b>51%</b>. Por eso en ese problema se usa la forma general, y el refrigerante sale a
+    $T_{a2} = T - 0.411\,(T - T_{a1})$.</p>
+
+    <h4>3. PFR o PBR con intercambio de calor</h4>
+    <div class="formula">$$ \frac{dT}{dV} = \frac{r_A\,\Delta H_{Rx} - Ua\,(T - T_a)}{F_{A0}\sum \Theta_i C_{p_i}} \qquad (a = \text{área de intercambio por unidad de volumen}) $$</div>
+    <p>Balance en el refrigerante a lo largo del reactor (Fogler, Ec. 12-10 y 12-11):</p>
+    <div class="pair">
+      <div>
+        <h5>Co-corriente</h5>
+        $$ \frac{dT_a}{dV} = \frac{Ua\,(T - T_a)}{\dot m_c C_{P_c}}, \qquad T_a(0) = T_{a0} $$
+      </div>
+      <div>
+        <h5>Contracorriente</h5>
+        $$ \frac{dT_a}{dV} = \frac{Ua\,(T_a - T)}{\dot m_c C_{P_c}}, \qquad T_a(V_f) = T_{a0} $$
+        <p class="note">Se supone $T_a(0)$ y se ajusta hasta cumplir la condición en la salida.</p>
+      </div>
+    </div>
+    <p class="note">Con flujo de refrigerante muy grande, $T_a$ es prácticamente constante y basta con la ecuación de $dT/dV$.</p>
+
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem03-no-adiabatica.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores/sem03-no-adiabatica.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/pfr_intercambio.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/pfr_intercambio.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/reactores/tarea03.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s4" class="week exam">
+    <h3><span class="num">Semana 4</span>Primer examen parcial + taller de repaso</h3>
+    <ul class="topics">
+      <li>Evaluación: balance de energía, operación adiabática y no adiabática en estado estacionario</li>
+      <li>Entrega de problemario del bloque 1</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="pdf/reactores/sem04-guia-parcial1.pdf"><span class="ic">📄</span>Guía de estudio</a>
+      <a class="res pending" href="pdf/reactores/sem04-parcial1-resuelto.pdf"><span class="ic">✏️</span>Parcial resuelto</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 2 ============ -->
+  <div class="block-label">Bloque 2 · Régimen transitorio, arranque y estabilidad</div>
+
+  <section id="s5" class="week">
+    <h3><span class="num">Semana 5</span>Reactores por lotes no isotérmicos</h3>
+    <ul class="topics">
+      <li>Balance de energía en el reactor por lotes: operación adiabática y con chaqueta</li>
+      <li>Calor generado contra calor removido; descontrol térmico (<i>runaway</i>)</li>
+      <li>Seguridad de reactores: fallas de enfriamiento y el caso Monsanto (Fogler ej. 13-1 y 13-2)</li>
+    </ul>
+    <div class="formula">$$ \frac{dT}{dt} = \frac{\dot Q_g - \dot Q_r}{N_{A0}\sum \Theta_i C_{p_i}}, \qquad \dot Q_g = (-r_A V)(-\Delta H_{Rx}) $$</div>
+    <div class="resources">
+      <a class="res" href="pdf/reactores/ejercicios_reactor_batch_UV.pdf"><span class="ic">✏️</span>Ejercicios · reactores por lotes no isotérmicos</a>
+      <a class="res pending" href="notas/reactores-sem05-batch.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/python/batch_no_isotermico.py"><span class="ic">🐍</span>Python</a>
+    </div>
+  </section>
+
+  <section id="s6" class="week">
+    <h3><span class="num">Semana 6</span>Arranque de un CSTR no isotérmico</h3>
+    <ul class="topics">
+      <li>Balances de materia y energía dependientes del tiempo</li>
+      <li>Trayectorias de arranque en el plano de fases $C_A$–$T$</li>
+      <li>Límite práctico de estabilidad y procedimiento de arranque seguro (Fogler ej. 13-4)</li>
+    </ul>
+    <div class="formula">
+      $$ \frac{dT}{dt} = \frac{\dot Q_g - \dot Q_r}{\sum N_j C_{p_j}} $$
+      $$ \dot Q_r = F_{A0}\sum \Theta_i C_{p_i}(T - T_0) + \dot m_c C_{p_c}(T - T_{a1})\left[1 - \exp\!\left(-\frac{UA}{\dot m_c C_{p_c}}\right)\right] $$
+    </div>
+    <div class="resources">
+      <a class="res" href="pdf/reactores/problema_CSTR_UV.pdf"><span class="ic">✏️</span>Problema · arranque de un CSTR no isotérmico</a>
+      <a class="res pending" href="notas/reactores-sem06-cstr-arranque.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/cstr_arranque.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/cstr_arranque.py"><span class="ic">🐍</span>Python</a>
+    </div>
+  </section>
+
+  <!-- ★★★ SEMANA DE EJEMPLO COMPLETA (fórmula + código MATLAB/Python + recursos) ★★★ -->
+  <section id="s7" class="week">
+    <h3><span class="num">Semana 7</span>Estabilidad y multiplicidad de estados estacionarios</h3>
+    <ul class="topics">
+      <li>Calor generado $G(T)$ y calor removido $R(T)$</li>
+      <li>Estados estacionarios múltiples; ignición y extinción</li>
+      <li>Criterio de estabilidad (Fogler cap. 12)</li>
+    </ul>
+
+    <div class="formula">
+      $$ G(T) = (-\Delta H_{Rx})\,X_{MB}(T), \qquad R(T) = C_{p0}\,(1+\kappa)\,(T - T_c) $$
+      $$ \kappa = \frac{UA}{F_{A0}\,C_{p0}}, \qquad T_c = \frac{T_0 + \kappa T_a}{1+\kappa}, \qquad \text{estable si } \frac{dR}{dT} > \frac{dG}{dT} $$
+    </div>
+
+    <p class="note">▼ Ejemplo introductorio: reacción A → B de primer orden en un CSTR adiabático ($\kappa = 0$) con
+    $T_0 = 320$ K, $\tau = 10$ min, $E/R = 10\,000$ K, $\Delta H_{Rx} = -8000$ cal/mol y
+    $\sum\Theta_i C_{p_i} = 40$ cal/mol·K. El programa encuentra <b>tres estados estacionarios</b>:
+    ≈ 320 K (estable, casi sin reacción), ≈ 398 K (inestable) y ≈ 519 K (estable, X ≈ 0.996).</p>
+
+    <div class="code-block">
+      <div class="code-tabs">
+        <button class="active" onclick="showTab(this,'m-mult')">MATLAB</button>
+        <button onclick="showTab(this,'p-mult')">Python</button>
+        <button class="copy" onclick="copyCode(this)">copiar</button>
+      </div>
+      <div class="code-pane active" id="m-mult"><pre><code>% ---- Datos ----
+T0 = 320; tau = 10; k1 = 0.002; T1 = 350;   % K, min, 1/min, K
+EoR = 10000; dH = -8000; Cp = 40;           % K, cal/mol, cal/(mol K)
+
+k = @(T) k1*exp(EoR*(1/T1 - 1./T));
+X = @(T) tau*k(T)./(1 + tau*k(T));     % balance de moles (CSTR)
+G = @(T) -dH*X(T);                     % calor generado
+R = @(T) Cp*(T - T0);                  % calor removido
+f = @(T) G(T) - R(T);
+
+% ---- Buscar intersecciones G(T) = R(T) ----
+T = linspace(T0, 560, 2000);  y = f(T);
+for i = 1:numel(T)-1
+    if y(i)*y(i+1) &lt; 0
+        Ts = fzero(f, [T(i) T(i+1)]);
+        if y(i) &gt; 0, tipo = 'estable'; else, tipo = 'inestable'; end
+        fprintf('T = %6.1f K   X = %.3f   (%s)\n', Ts, X(Ts), tipo);
+    end
+end
+
+plot(T, G(T), 'r', T, R(T), 'b'); grid on
+xlabel('T [K]'); ylabel('cal/mol'); legend('G(T)', 'R(T)');</code></pre></div>
+      <div class="code-pane" id="p-mult"><pre><code>import numpy as np
+from scipy.optimize import brentq
+import matplotlib.pyplot as plt
+
+# ---- Datos ----
+T0, tau, k1, T1 = 320.0, 10.0, 0.002, 350.0   # K, min, 1/min, K
+EoR, dH, Cp = 10000.0, -8000.0, 40.0          # K, cal/mol, cal/(mol K)
+
+k = lambda T: k1 * np.exp(EoR * (1/T1 - 1/T))
+X = lambda T: tau * k(T) / (1 + tau * k(T))   # balance de moles (CSTR)
+G = lambda T: -dH * X(T)                      # calor generado
+R = lambda T: Cp * (T - T0)                   # calor removido
+f = lambda T: G(T) - R(T)
+
+# ---- Buscar intersecciones G(T) = R(T) ----
+T = np.linspace(T0, 560, 2000)
+y = f(T)
+for i in range(len(T) - 1):
+    if y[i] * y[i + 1] &lt; 0:
+        Ts = brentq(f, T[i], T[i + 1])
+        tipo = "estable" if y[i] &gt; 0 else "inestable"
+        print(f"T = {Ts:6.1f} K   X = {X(Ts):.3f}   ({tipo})")
+
+plt.plot(T, G(T), "r", label="G(T)")
+plt.plot(T, R(T), "b", label="R(T)")
+plt.xlabel("T [K]"); plt.ylabel("cal/mol"); plt.legend(); plt.grid(True)
+plt.show()</code></pre></div>
+    </div>
+
+    <div class="resources">
+      <a class="res" href="pdf/reactores/problema_multiplicidad_UV.pdf"><span class="ic">✏️</span>Problema · multiplicidad de estados estacionarios en un CSTR</a>
+      <a class="res pending" href="notas/reactores-sem07-multiplicidad.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res" href="codigo/matlab/multiplicidad_cstr.m"><span class="ic">🧮</span>MATLAB · ejemplo</a>
+      <a class="res" href="codigo/python/multiplicidad_cstr.py"><span class="ic">🐍</span>Python · ejemplo</a>
+    </div>
+  </section>
+
+  <section id="s8" class="week">
+    <h3><span class="num">Semana 8</span>Arranque y respuesta dinámica de un reactor tubular</h3>
+    <ul class="topics">
+      <li>PFR transitorio: balances como ecuaciones diferenciales parciales</li>
+      <li>Discretización en celdas (método de líneas, Luyben cap. 6–7)</li>
+      <li>Arranque, punto caliente y sensibilidad paramétrica</li>
+    </ul>
+    <div class="formula">
+      $$ \frac{dC_{A,n}}{dt} = \frac{v_0}{\Delta V}\,(C_{A,n-1} - C_{A,n}) - k(T_n)\,C_{A,n} $$
+      $$ \frac{dT_n}{dt} = \frac{v_0}{\Delta V}\,(T_{n-1} - T_n) + \frac{(-\Delta H_{Rx})\,k(T_n)\,C_{A,n} - Ua\,(T_n - T_a)}{\rho c_p} $$
+    </div>
+    <div class="resources">
+      <a class="res" href="pdf/reactores/pfr_transitorio_alumnos_UV.pdf"><span class="ic">✏️</span>Problema · arranque y respuesta dinámica de un reactor tubular</a>
+      <a class="res pending" href="notas/reactores-sem08-pfr-transitorio.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/pfr_transitorio.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/pfr_transitorio.py"><span class="ic">🐍</span>Python</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 3 ============ -->
+  <div class="block-label">Bloque 3 · Flujo no ideal</div>
+
+  <section id="s9" class="week">
+    <h3><span class="num">Semana 9</span>Distribución del tiempo de residencia (DTR)</h3>
+    <ul class="topics">
+      <li>Pruebas de trazador: entrada en pulso y en escalón</li>
+      <li>Funciones $E(t)$ y $F(t)$; DTR de reactores ideales</li>
+      <li>Tiempo medio de residencia y varianza</li>
+    </ul>
+    <div class="formula">
+      $$ E(t) = \frac{C(t)}{\displaystyle\int_0^\infty C(t)\,dt}, \qquad F(t) = \int_0^t E(t')\,dt' $$
+      $$ t_m = \int_0^\infty t\,E(t)\,dt, \qquad \sigma^2 = \int_0^\infty (t - t_m)^2 E(t)\,dt $$
+    </div>
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem09-dtr.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores/sem09-dtr.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/python/dtr_trazador.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/reactores/tarea09.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s10" class="week">
+    <h3><span class="num">Semana 10</span>Efectos de mezclado y modelos de flujo</h3>
+    <ul class="topics">
+      <li>Modelos de segregación y de mezcla máxima</li>
+      <li>Modelo de tanques en serie; modelo de dispersión axial y número de Peclet</li>
+      <li>Modelado de reactores reales con combinaciones de reactores ideales</li>
+    </ul>
+    <div class="formula">$$ \bar X_{seg} = \int_0^\infty X(t)\,E(t)\,dt, \qquad n = \frac{\tau^2}{\sigma^2}, \qquad X = 1 - \frac{1}{(1 + \tau_i k)^n} \quad \text{(primer orden)} $$</div>
+
+    <h4>Reactor tubular con dispersión axial</h4>
+    <p>Es un PFR al que se le suma un término tipo difusión en la dirección del flujo: el mezclado axial
+    (por turbulencia, perfil de velocidad o empaque) se describe con un coeficiente de dispersión $D_a$
+    para la masa y una conductividad efectiva axial $\lambda_{ea}$ para el calor.</p>
+    <p class="note">Notación: $u$ = velocidad superficial (Fogler la llama $U$), $z$ = posición axial, $L$ = longitud,
+    $a = 4/d_t$ = área de intercambio por unidad de volumen, $U$ = coeficiente global de transferencia de calor.</p>
+
+    <h4>1. Estado estacionario</h4>
+    <div class="pair">
+      <div>
+        <h5>Balance de moles</h5>
+        $$ D_a\frac{d^2C_A}{dz^2} - u\frac{dC_A}{dz} + r_A = 0 $$
+        <p class="note">Fogler, Ec. 14-16 y 18-15.</p>
+      </div>
+      <div>
+        <h5>Balance de energía</h5>
+        $$ \lambda_{ea}\frac{d^2T}{dz^2} - u\,\rho c_p\frac{dT}{dz} + (-\Delta H_{Rx})(-r_A) - Ua\,(T - T_a) = 0 $$
+        <p class="note">Froment, Ec. 11.6-2 (con $Ua = 4U/d_t$).</p>
+      </div>
+    </div>
+
+    <h4>2. Condiciones de frontera de Danckwerts (recipiente cerrado-cerrado)</h4>
+    <div class="pair">
+      <div>
+        <h5>Entrada, $z = 0$</h5>
+        $$ u\,C_{A0} = u\,C_A(0^+) - D_a\left.\frac{dC_A}{dz}\right|_{0^+} $$
+        $$ u\,\rho c_p\,T_0 = u\,\rho c_p\,T(0^+) - \lambda_{ea}\left.\frac{dT}{dz}\right|_{0^+} $$
+      </div>
+      <div>
+        <h5>Salida, $z = L$</h5>
+        $$ \left.\frac{dC_A}{dz}\right|_{L} = 0, \qquad \left.\frac{dT}{dz}\right|_{L} = 0 $$
+      </div>
+    </div>
+    <p class="note">Fogler, Ec. 18-20 y 18-21; Froment, sección 11.6. Es un problema con valores en la frontera
+    (condiciones en dos puntos), así que se resuelve por disparo o con <code>bvp4c</code> (MATLAB) / <code>solve_bvp</code> (Python).
+    La concentración da un “salto” en la entrada, igual que en un CSTR.</p>
+
+    <h4>3. Estado no estacionario (dinámico)</h4>
+    <div class="pair">
+      <div>
+        <h5>Balance de moles</h5>
+        $$ \frac{\partial C_A}{\partial t} = D_a\frac{\partial^2 C_A}{\partial z^2} - u\frac{\partial C_A}{\partial z} + r_A $$
+        <p class="note">Sin reacción ($r_A = 0$) es la ecuación del trazador, Fogler Ec. 18-14.</p>
+      </div>
+      <div>
+        <h5>Balance de energía</h5>
+        $$ \rho c_p\frac{\partial T}{\partial t} = \lambda_{ea}\frac{\partial^2 T}{\partial z^2} - u\,\rho c_p\frac{\partial T}{\partial z} + (-\Delta H_{Rx})(-r_A) - Ua\,(T - T_a) $$
+      </div>
+    </div>
+    <p class="note">Las mismas condiciones de Danckwerts aplican en cada instante. Se resuelve con el método de líneas,
+    como el PFR transitorio de la semana 8, pero ahora cada celda también intercambia con la celda siguiente.</p>
+
+    <h4>4. Forma adimensional y solución analítica (isotérmico, primer orden)</h4>
+    <p>Con $\psi = C_A/C_{A0}$, $\xi = z/L$, $Pe_r = uL/D_a$ y $Da_1 = \tau k$:</p>
+    <div class="formula">
+      $$ \frac{1}{Pe_r}\frac{d^2\psi}{d\xi^2} - \frac{d\psi}{d\xi} - Da_1\,\psi = 0, \qquad
+         \xi = 0:\; 1 = \psi(0^+) - \frac{1}{Pe_r}\left.\frac{d\psi}{d\xi}\right|_{0^+}, \qquad
+         \xi = 1:\; \frac{d\psi}{d\xi} = 0 $$
+      $$ X = 1 - \frac{4q\,\exp(Pe_r/2)}{(1+q)^2\exp(Pe_r\,q/2) - (1-q)^2\exp(-Pe_r\,q/2)}, \qquad q = \sqrt{1 + \frac{4\,Da_1}{Pe_r}} $$
+    </div>
+    <ul class="topics">
+      <li>$Pe_r \to \infty$ (sin dispersión): el modelo tiende al <b>PFR</b>, $X = 1 - e^{-Da_1}$.</li>
+      <li>$Pe_r \to 0$ (dispersión infinita): tiende al <b>CSTR</b>, $X = Da_1/(1 + Da_1)$.</li>
+      <li>Fuera de primer orden o con efectos térmicos no hay solución analítica: se resuelve numéricamente.</li>
+    </ul>
+    <p class="note">Fogler, Ec. 18-17, 18-24, 18-25 y 18-27. Cuándo se puede despreciar la dispersión axial
+    en lechos empacados: Froment, Ec. 11.6-3 y 11.6-4 (en la práctica, lechos de más de unos 50 diámetros de partícula).</p>
+
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem10-modelos-flujo.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores/sem10-modelos-flujo.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/tanques_serie.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/tanques_serie.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="codigo/python/dispersion_axial.py"><span class="ic">🐍</span>Python · dispersión</a>
+      <a class="res pending" href="pdf/reactores/tarea10.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s11" class="week exam">
+    <h3><span class="num">Semana 11</span>Segundo examen parcial + taller de repaso</h3>
+    <ul class="topics">
+      <li>Evaluación: régimen transitorio, estabilidad y flujo no ideal</li>
+      <li>Entrega de problemarios de los bloques 2 y 3</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="pdf/reactores/sem11-guia-parcial2.pdf"><span class="ic">📄</span>Guía de estudio</a>
+      <a class="res pending" href="pdf/reactores/sem11-parcial2-resuelto.pdf"><span class="ic">✏️</span>Parcial resuelto</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 4 ============ -->
+  <div class="block-label">Bloque 4 · Reactores heterogéneos</div>
+
+  <section id="s12" class="week">
+    <h3><span class="num">Semana 12</span>Reacciones catalizadas por sólidos</h3>
+    <ul class="topics">
+      <li>Etapas de una reacción catalítica: adsorción, reacción superficial y desorción</li>
+      <li>Mecanismos de Langmuir-Hinshelwood y etapa limitante</li>
+      <li>Ajuste de leyes de velocidad a datos experimentales</li>
+    </ul>
+    <div class="formula">$$ -r'_A = \frac{k\,K_A P_A}{1 + K_A P_A + K_B P_B} $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem12-catalisis.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores-sem12-catalisis.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/python/ajuste_lh.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/reactores-tarea12.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s13" class="week">
+    <h3><span class="num">Semana 13</span>Reactor de lecho empacado (PBR)</h3>
+    <ul class="topics">
+      <li>Diseño de reactores de lecho empacado</li>
+      <li>Caída de presión: ecuación de Ergun</li>
+    </ul>
+    <div class="formula">
+      $$ \frac{dX}{dW} = \frac{-r'_A}{F_{A0}} $$
+      $$ \frac{dP}{dz} = -\frac{G}{\rho\,D_p}\left(\frac{1-\phi}{\phi^3}\right)\left[\frac{150\,(1-\phi)\,\mu}{D_p} + 1.75\,G\right] $$
+    </div>
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem13-lecho-empacado.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores-sem13-lecho-empacado.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/pbr_ergun.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/pbr_ergun.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/reactores-tarea13.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s14" class="week">
+    <h3><span class="num">Semana 14</span>Reactor de lecho fluidizado y desactivación del catalizador</h3>
+    <ul class="topics">
+      <li>Fluidización y modelo de reactor de lecho fluidizado</li>
+      <li>Desactivación: sinterizado, coquizado y envenenamiento</li>
+      <li>Actividad del catalizador y su efecto en el diseño</li>
+    </ul>
+    <div class="formula">$$ -r'_A(t) = a(t)\,\big(-r'_A\big)_{\text{fresco}}, \qquad -\frac{da}{dt} = k_d\,a^n $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem14-fluidizado.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores-sem14-fluidizado.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/python/desactivacion.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/reactores-tarea14.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+
+  <!-- ============ BLOQUE 5 ============ -->
+  <div class="block-label">Bloque 5 · Reactores biológicos</div>
+
+  <section id="s15" class="week">
+    <h3><span class="num">Semana 15</span>Reactores biológicos</h3>
+    <ul class="topics">
+      <li>Cinética de crecimiento celular: ecuación de Monod</li>
+      <li>Biorreactor por lotes y quimiostato; lavado (<i>wash-out</i>)</li>
+    </ul>
+    <div class="formula">$$ r_g = \frac{\mu_{max}\,C_s}{K_s + C_s}\,C_c, \qquad \text{quimiostato en estado estacionario: } D = \mu $$</div>
+    <div class="resources">
+      <a class="res pending" href="notas/reactores-sem15-biologicos.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/reactores-sem15-biologicos.pdf"><span class="ic">📄</span>PDF</a>
+      <a class="res pending" href="#"><span class="ic">▶️</span>Video</a>
+      <a class="res pending" href="codigo/matlab/quimiostato.m"><span class="ic">🧮</span>MATLAB</a>
+      <a class="res pending" href="codigo/python/quimiostato.py"><span class="ic">🐍</span>Python</a>
+      <a class="res pending" href="pdf/tareas/reactores-tarea15.pdf"><span class="ic">✏️</span>Tarea</a>
+    </div>
+  </section>
+
+  <section id="s16" class="week project">
+    <h3><span class="num">Semana 16</span>Proyecto integrador y examen final</h3>
+    <ul class="topics">
+      <li>Diseño de un reactor no ideal o heterogéneo con software especializado</li>
+      <li>Presentación del proyecto</li>
+      <li>Tercer examen parcial / evaluación final</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="pdf/reactores-sem16-rubrica-proyecto.pdf"><span class="ic">📄</span>Rúbrica del proyecto</a>
+      <a class="res pending" href="pdf/reactores-sem16-lineamientos.pdf"><span class="ic">📄</span>Lineamientos</a>
+    </div>
+  </section>
+
+
+  <!-- ============ EVALUACIÓN ============ -->
+  <div class="block-label" id="evaluacion">Evaluación</div>
+  <section class="week">
+    <h3>Criterios de acreditación</h3>
+    <ul class="topics">
+      <li><b>Exámenes escritos</b> (evaluación por problemas y estudios de caso) — <b>50%</b></li>
+      <li><b>Tareas</b> (reportes de lectura, problemarios, organizadores gráficos, resúmenes) — <b>30%</b></li>
+      <li><b>Proyecto</b> (estudio de caso) — <b>10%</b></li>
+      <li><b>Presentación del proyecto</b> — <b>10%</b></li>
+    </ul>
+    <p class="note">Indicadores de desempeño: procedimiento, resultado, claridad, orden y entrega oportuna.
+    Para acreditar se requiere el 80% de asistencia y al menos el 60% en las evidencias de desempeño,
+    de acuerdo con el Estatuto de Alumnos 2008.</p>
+  </section>
+
+
+  <!-- ============ RECURSOS ============ -->
+  <div class="block-label" id="recursos">Bibliografía y software</div>
+  <section class="week">
+    <h3>Fuentes de información</h3>
+    <ul class="topics">
+      <li>Fogler, H. S. (2013). <i>Elementos de ingeniería de las reacciones químicas</i> (6.ª ed.). Prentice Hall.</li>
+      <li>Froment, G. F., Bischoff, K. B., &amp; De Wilde, J. (2011). <i>Chemical Reactor Analysis and Design</i> (3rd ed.). John Wiley &amp; Sons.</li>
+      <li>Önsan, Z. I., &amp; Avci, A. K. (2016). <i>Multiphase Catalytic Reactors</i>. Wiley.</li>
+      <li>Carberry, J. J. (2001). <i>Chemical and Catalytic Reaction Engineering</i>. Courier Corporation.</li>
+      <li>Conesa, J. A. (2020). <i>Chemical Reactor Design: Mathematical Modeling and Applications</i>. Wiley-VCH.</li>
+    </ul>
+    <div class="resources">
+      <a class="res" href="https://www.mathworks.com/products/matlab.html"><span class="ic">🧮</span>MATLAB / GNU Octave</a>
+      <a class="res" href="https://www.python.org/"><span class="ic">🐍</span>Python (NumPy · SciPy)</a>
+      <a class="res" href="https://dwsim.org/"><span class="ic">⚗️</span>DWSIM (simulador libre)</a>
+      <a class="res" href="https://www.youtube.com/@LearnChemE"><span class="ic">▶️</span>Canal LearnChemE</a>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<footer>
+  © 2026 Prof. Fili · Ingeniería de Reactores II (QIIA 18010) · Universidad Veracruzana
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

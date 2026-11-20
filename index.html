@@ -3,268 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prof. Fili | Portal Académico</title>
-
-<style>
-
-/* BASE */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: #eee;
-}
-
-/* TOP NAV */
-.topnav {
-    position: fixed;
-    width: 100%;
-    background: #000;
-    padding: 12px 20px;
-    z-index: 1000;
-}
-
-.topnav a {
-    color: #ccc;
-    margin-right: 20px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.topnav a:hover {
-    color: #fff;
-}
-
-/* HERO (FONDO CLARO TRANSLÚCIDO) */
-.hero {
-    height: 60vh;
-    background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
-                url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: black;
-}
-
-.hero h1 {
-    font-size: 50px;
-    margin: 0;
-}
-
-.hero p {
-    color: #aaa;
-}
-
-/* LAYOUT */
-.container {
-    display: flex;
-    margin-top: 60px;
-}
-
-/* SIDEBAR */
-.sidebar {
-    width: 260px;
-    background: #1a1a1a;
-    padding: 20px;
-    height: 100vh;
-    position: sticky;
-    top: 60px;
-    border-right: 1px solid #333;
-}
-
-.sidebar h3 {
-    color: #fff;
-}
-
-.sidebar a {
-    display: block;
-    color: #bbb;
-    text-decoration: none;
-    margin-bottom: 10px;
-}
-
-.sidebar a:hover {
-    color: white;
-}
-
-/* MAIN */
-main {
-    flex: 1;
-    padding: 40px;
-}
-
-/* SECTION */
-.section {
-    margin-bottom: 60px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: 0.6s ease;
-}
-
-.section.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* CARD */
-.card {
-    background: #1e1e1e;
-    border: 1px solid #333;
-    padding: 20px;
-    margin-bottom: 20px;
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: scale(1.02);
-    border-color: #666;
-}
-
-/* BUTTON */
-.button {
-    display: inline-block;
-    padding: 6px 10px;
-    border: 1px solid #888;
-    color: #ccc;
-    text-decoration: none;
-    font-size: 13px;
-    margin-right: 10px;
-}
-
-.button:hover {
-    background: #fff;
-    color: #000;
-}
-
-/* FOOTER */
-footer {
-    text-align: center;
-    padding: 20px;
-    background: #000;
-    color: #aaa;
-}
-
-/* RESPONSIVE */
-@media (max-width: 800px) {
-    .container {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-    }
-}
-
-</style>
+<title>Portal Académico | Prof. Fili — UV</title>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
 
-<!-- NAV -->
-<div class="topnav">
-    <a href="#">Inicio</a>
-    <a href="#momentum">Momentum</a>
-    <a href="fluidos.html">Fluidos</a>
-    <a href="numericos.html">Numéricos</a>
-</div>
+<!-- =================== NAV =================== -->
+<nav class="topnav">
+  <a href="index.html">Inicio</a>
+  <a href="FTMomentum.html">Momentum</a>
+  <a href="fluidos.html">Fluidos</a>
+  <a href="reactores.html">Reactores II</a>
+  <a href="numericos.html">Numéricos</a>
+  <span class="brand">Prof. Fili · Universidad Veracruzana</span>
+</nav>
 
-<!-- HERO -->
-<section class="hero">
-    <div>
-        <h1>Portal Académico</h1>
-        <p>Ingeniería | Prof. Fili</p>
+<!-- =================== HEADER =================== -->
+<header class="hero portal">
+  <div class="wrap">
+    <h1>Portal Académico</h1>
+    <p class="sub">Material de cursos de Ingeniería · Prof. Fili · Universidad Veracruzana</p>
+    <div class="meta">
+      <span class="chip">Notas · PDF · Video</span>
+      <span class="chip">Código en <b>MATLAB</b> y <b>Python</b></span>
+      <span class="chip">Organizado por <b>semanas</b></span>
     </div>
-</section>
+  </div>
+</header>
 
-<div class="container">
+<div class="page">
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-    <h3>Cursos</h3>
-    <a href="momentum.html">Momentum</a>
-    <a href="fluidos.html">Fluidos</a>
-    <a href="FTMomentum.html">F. T. Momentum</a>
-    <a href="numericos.html">Numéricos</a>
+  <!-- ============ CURSOS ============ -->
+  <div class="block-label">Cursos</div>
+  <div class="courses">
 
-    <h3>Recursos</h3>
-    <a href="#">Programa</a>
-    <a href="#">Bibliografía</a>
-    <a href="#">Software</a>
-</aside>
+    <a class="course" href="FTMomentum.html">
+      <span class="code">INGENIERÍA QUÍMICA</span>
+      <h3>Fundamentos de Transferencia de Momentum</h3>
+      <p>Bernoulli, ecuación de movimiento de Cauchy y ecuaciones de Navier-Stokes.</p>
+      <span class="go">Entrar al curso →</span>
+    </a>
 
-<!-- MAIN -->
-<main>
+    <a class="course" href="fluidos.html">
+      <span class="code">QIIA 18004</span>
+      <h3>Mecánica de Fluidos</h3>
+      <p>Propiedades y reología, Bernoulli, pérdidas por fricción, bombas, flujo compresible y bifásico, redes y CFD.</p>
+      <span class="go">Entrar al curso →</span>
+    </a>
 
-<section id="momentum" class="section">
-    <h2>Transferencia de Momentum</h2>
+    <a class="course" href="reactores.html">
+      <span class="code">QIIA 18010</span>
+      <h3>Ingeniería de Reactores II</h3>
+      <p>Reactores no isotérmicos, régimen transitorio, flujo no ideal (DTR), reactores catalíticos heterogéneos y biológicos.</p>
+      <span class="go">Entrar al curso →</span>
+    </a>
 
-    <div class="card">
-        <h4>Semana 1</h4>
-        <p>Conceptos básicos: esfuerzo y viscosidad.</p>
-        <a class="button" href="transferencia-calor-masa.md">Notas</a>
+    <a class="course" href="numericos.html">
+      <span class="code">TCIN 18004</span>
+      <h3>Métodos Numéricos</h3>
+      <p>Errores, raíces de ecuaciones, sistemas lineales, regresión e interpolación, derivación, integración y EDO.</p>
+      <span class="go">Entrar al curso →</span>
+    </a>
+
+  </div>
+
+  <!-- ============ RECURSOS ============ -->
+  <div class="block-label">Recursos</div>
+  <section class="week">
+    <h3>Material de apoyo</h3>
+    <ul class="topics">
+      <li>Cada curso incluye su bibliografía, software recomendado y criterios de evaluación al final de su página.</li>
+      <li>Todos los programas de Métodos Numéricos están disponibles en MATLAB y en Python.</li>
+    </ul>
+    <div class="resources">
+      <a class="res" href="https://github.com/Fili10245/uv/tree/main/codigo"><span class="ic">💻</span>Repositorio de código</a>
+      <a class="res" href="numericos.html#recursos"><span class="ic">📚</span>Bibliografía · Numéricos</a>
+      <a class="res" href="fluidos.html#recursos"><span class="ic">📚</span>Bibliografía · Fluidos</a>
+      <a class="res" href="numericos.html#evaluacion"><span class="ic">✅</span>Evaluación · Numéricos</a>
+      <a class="res" href="fluidos.html#evaluacion"><span class="ic">✅</span>Evaluación · Fluidos</a>
     </div>
+  </section>
 
-    <div class="card">
-        <h4>Semana 2</h4>
-        <p>Ecuaciones de transporte.</p>
-    </div>
-</section>
-
-<section id="fluidos" class="section">
-    <h2>Mecánica de Fluidos</h2>
-
-    <div class="card">
-        <h4>Semana 1</h4>
-        <p>Propiedades de fluidos.</p>
-        <a class="button" href="fenomenos-superficie.md">Notas</a>
-    </div>
-
-    <div class="card">
-        <h4>Semana 2</h4>
-        <p>Estática de fluidos.</p>
-    </div>
-</section>
-
-<section id="numericos" class="section">
-    <h2>Métodos Numéricos</h2>
-
-    <div class="card">
-        <h4>Semana 1</h4>
-        <p>Raíces de ecuaciones.</p>
-        <a class="button" href="simulacion-optimizacion.md">Notas</a>
-    </div>
-
-    <div class="card">
-        <h4>Semana 2</h4>
-        <p>Sistemas de ecuaciones.</p>
-    </div>
-</section>
-
-</main>
 </div>
 
 <footer>
-    © 2026 Prof. Fili | Universidad Veracruzana
+  © 2026 Prof. Fili · Universidad Veracruzana
 </footer>
 
-<!-- ANIMATIONS -->
-<script>
-const sections = document.querySelectorAll('.section');
-
-window.addEventListener('scroll', () => {
-    sections.forEach(sec => {
-        const top = sec.getBoundingClientRect().top;
-        if (top < window.innerHeight - 100) {
-            sec.classList.add('show');
-        }
-    });
-});
-</script>
-
+<script src="assets/site.js"></script>
 </body>
 </html>

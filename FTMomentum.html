@@ -3,154 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Transferencia de Momentum</title>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<title>Fundamentos de Transferencia de Momentum | Prof. Fili — UV</title>
 
-<style>
+<!-- MathJax: renderiza fórmulas escritas con $...$ (en línea) o $$...$$ (bloque) -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
-/* FONDO GLOBAL CON IMAGEN */
-body {
-    margin: 0;
-    font-family: Arial;
-    color: #000;
-    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)),
-                url('CauchyDeriv.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
-
-/* NAV */
-.topnav {
-    background: rgba(0,0,0,0.9);
-    padding: 10px;
-}
-
-.topnav a {
-    color: white;
-    text-decoration: none;
-}
-
-/* LAYOUT */
-.container {
-    display: flex;
-}
-
-/* SIDEBAR */
-.sidebar {
-    width: 250px;
-    background: rgba(255,255,255,0.9);
-    padding: 20px;
-}
-
-.sidebar a {
-    display: block;
-    color: #333;
-    margin-bottom: 10px;
-    text-decoration: none;
-}
-
-/* MAIN */
-main {
-    flex: 1;
-    padding: 40px;
-}
-
-/* SECTIONS */
-.section {
-    margin-bottom: 40px;
-}
-
-/* TARJETAS EN BLANCO (CLAVE PARA LEGIBILIDAD) */
-.card {
-    background: rgba(255,255,255,0.95);
-    padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-}
-
-/* BOTONES */
-.button {
-    border: 1px solid #333;
-    padding: 6px 10px;
-    color: #333;
-    text-decoration: none;
-}
-
-.button:hover {
-    background: black;
-    color: white;
-}
-
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
 
-<div class="topnav">
-    <a href="index.html">← Volver</a>
-</div>
+<!-- =================== NAV =================== -->
+<nav class="topnav">
+  <a href="index.html">← Inicio</a>
+  <a href="FTMomentum.html">Momentum</a>
+  <a href="fluidos.html">Fluidos</a>
+  <a href="reactores.html">Reactores II</a>
+  <a href="numericos.html">Numéricos</a>
+  <span class="brand">Prof. Fili · Universidad Veracruzana</span>
+</nav>
+
+<!-- =================== HEADER =================== -->
+<header class="hero">
+  <div class="wrap">
+    <h1>Fundamentos de Transferencia de Momentum</h1>
+    <p class="sub">Ingeniería Química · Fenómenos de transporte</p>
+    <div class="meta">
+      <span class="chip">Bernoulli</span>
+      <span class="chip">Ecuación de Cauchy</span>
+      <span class="chip">Navier-Stokes</span>
+    </div>
+  </div>
+</header>
 
 <div class="container">
 
+<!-- =================== SIDEBAR =================== -->
 <aside class="sidebar">
-    <h3>Contenido</h3>
-    <a href="#semana1">Semana 1</a>
-    <a href="#semana2">Semana 2</a>
+  <h3>SEMANAS</h3>
+  <a href="#s1"><span class="wk">S1</span>Bernoulli · Cauchy · N-S</a>
+  <a href="#s2"><span class="wk">S2</span>Ecuaciones de transporte</a>
 </aside>
 
+<!-- =================== MAIN =================== -->
 <main>
 
-<h1 style="color:white;">Transferencia de Momentum</h1>
+  <div class="block-label">Unidad 1 · Ecuaciones de conservación</div>
 
-<section id="semana1" class="section">
-    <h2 style="color:white;">Semana 1</h2>
-    <div class="card">
-        <p>Principio de Bernooulli</p>
-        <p>La ecuación de Bernoulli entre dos puntos es:</p>
-$$ P_1 + \frac{1}{2}\rho v_1^2 + \rho gh_1 = P_2 + \frac{1}{2}\rho v_2^2 + \rho gh_2 $$
-        <p>La ley de Newton para el flujo laminar es:</p>
-$$ \tau_{yx} = -\mu \frac{dv_x}{dy} $$
-        <a class="button" href="transferencia-calor-masa.md">Notas</a>
-    
-    <h3>1. Ecuación de Movimiento de Cauchy</h3>
-    <p>Es la forma más general de la conservación del momentum para cualquier medio continuo:</p>
-    <div style="overflow-x:auto;">
-        $$ \rho \frac{D\mathbf{u}}{Dt} = \nabla \cdot \boldsymbol{\sigma} + \rho \mathbf{f} $$
-    </div>
-    <ul>
-        <li><strong>\(\rho \frac{D\mathbf{u}}{Dt}\)</strong>: Inercia (masa por aceleración sustancial).</li>
-        <li><strong>\(\nabla \cdot \boldsymbol{\sigma}\)</strong>: Divergencia del tensor de esfuerzos (fuerzas de superficie).</li>
-        <li><strong>\(\rho \mathbf{f}\)</strong>: Fuerzas de cuerpo (como la gravedad).</li>
-    </ul>
+  <section id="s1" class="week">
+    <h3><span class="num">Semana 1</span>Bernoulli, ecuación de Cauchy y Navier-Stokes</h3>
+
+    <h4>Principio de Bernoulli</h4>
+    <p>La ecuación de Bernoulli entre dos puntos es:</p>
+    <div class="formula">$$ P_1 + \frac{1}{2}\rho v_1^2 + \rho g h_1 = P_2 + \frac{1}{2}\rho v_2^2 + \rho g h_2 $$</div>
+    <p>La ley de Newton para el flujo laminar es:</p>
+    <div class="formula">$$ \tau_{yx} = -\mu \frac{dv_x}{dy} $$</div>
 
     <hr>
 
-    <h3>2. Ecuación de Navier-Stokes</h3>
+    <h4>1. Ecuación de movimiento de Cauchy</h4>
+    <p>Es la forma más general de la conservación del momentum para cualquier medio continuo:</p>
+    <div class="formula">$$ \rho \frac{D\mathbf{u}}{Dt} = \nabla \cdot \boldsymbol{\sigma} + \rho \mathbf{f} $$</div>
+    <ul class="topics">
+      <li><strong>\(\rho \frac{D\mathbf{u}}{Dt}\)</strong>: inercia (masa por aceleración sustancial).</li>
+      <li><strong>\(\nabla \cdot \boldsymbol{\sigma}\)</strong>: divergencia del tensor de esfuerzos (fuerzas de superficie).</li>
+      <li><strong>\(\rho \mathbf{f}\)</strong>: fuerzas de cuerpo (como la gravedad).</li>
+    </ul>
+    <figure class="fig">
+      <img src="CauchyDeriv.png" alt="Elemento diferencial dx·dy·dz con los esfuerzos σxx, σyx y σzx actuando en cada cara, en dirección x" loading="lazy">
+      <figcaption>Balance de fuerzas en dirección x sobre un elemento diferencial de fluido: esfuerzos normales y cortantes en cada cara.</figcaption>
+    </figure>
+
+    <hr>
+
+    <h4>2. Ecuación de Navier-Stokes</h4>
     <p>Para fluidos newtonianos e incompresibles (\(\nabla \cdot \mathbf{u} = 0\)):</p>
-    <div style="overflow-x:auto;">
-        $$ \rho \left( \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} \right) = -\nabla p + \mu \nabla^2 \mathbf{u} + \rho \mathbf{g} $$
-    </div>
-    <ul>
-        <li><strong>\(\rho \frac{\partial \mathbf{u}}{\partial t}\)</strong>: Cambio local de velocidad con el tiempo.</li>
-        <li><strong>\(\rho (\mathbf{u} \cdot \nabla)\mathbf{u}\)</strong>: Término advectivo (transporte de momentum por el flujo).</li>
-        <li><strong>\(-\nabla p\)</strong>: Fuerza debida al gradiente de presión.</li>
-        <li><strong>\(\mu \nabla^2 \mathbf{u}\)</strong>: Término viscoso (difusión de momentum).</li>
-        <li><strong>\(\rho \mathbf{g}\)</strong>: Fuerza gravitacional.</li>
+    <div class="formula">$$ \rho \left( \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} \right) = -\nabla p + \mu \nabla^2 \mathbf{u} + \rho \mathbf{g} $$</div>
+    <ul class="topics">
+      <li><strong>\(\rho \frac{\partial \mathbf{u}}{\partial t}\)</strong>: cambio local de velocidad con el tiempo.</li>
+      <li><strong>\(\rho (\mathbf{u} \cdot \nabla)\mathbf{u}\)</strong>: término advectivo (transporte de momentum por el flujo).</li>
+      <li><strong>\(-\nabla p\)</strong>: fuerza debida al gradiente de presión.</li>
+      <li><strong>\(\mu \nabla^2 \mathbf{u}\)</strong>: término viscoso (difusión de momentum).</li>
+      <li><strong>\(\rho \mathbf{g}\)</strong>: fuerza gravitacional.</li>
     </ul>
 
-</div>
-</section>
-
-<section id="semana2" class="section">
-    <h2 style="color:white;">Semana 2</h2>
-    <div class="card">
-        <p>Ecuaciones de transporte</p>
+    <div class="resources">
+      <a class="res pending" href="notas/ftmomentum-sem01.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/ftmomentum-sem01.pdf"><span class="ic">📄</span>PDF</a>
     </div>
-</section>
+  </section>
+
+  <section id="s2" class="week">
+    <h3><span class="num">Semana 2</span>Ecuaciones de transporte</h3>
+    <ul class="topics">
+      <li>Ecuaciones de transporte</li>
+    </ul>
+    <div class="resources">
+      <a class="res pending" href="notas/ftmomentum-sem02.md"><span class="ic">📝</span>Notas .md</a>
+      <a class="res pending" href="pdf/ftmomentum-sem02.pdf"><span class="ic">📄</span>PDF</a>
+    </div>
+  </section>
 
 </main>
 </div>
 
+<footer>
+  © 2026 Prof. Fili · Fundamentos de Transferencia de Momentum · Universidad Veracruzana
+</footer>
+
+<script src="assets/site.js"></script>
 </body>
 </html>
