@@ -32,6 +32,30 @@ function copyCode(btn){
   document.querySelectorAll('.topnav a').forEach(a => {
     if(a.getAttribute('href') === here) a.classList.add('current');
   });
+  // En celular el menú se desliza: dejar a la vista el curso actual
+  const nav = document.querySelector('.topnav');
+  const cur = nav && nav.querySelector('a.current');
+  if(cur) nav.scrollLeft = cur.offsetLeft - (nav.clientWidth - cur.offsetWidth) / 2;
+})();
+
+// En celular: lista de semanas plegable (el botón solo se ve en pantallas angostas)
+(function(){
+  const side = document.querySelector('.sidebar');
+  if(!side) return;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'week-toggle';
+  const title = side.querySelector('h3');
+  btn.textContent = title ? title.textContent : 'Semanas';
+  const setOpen = open => {
+    side.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+  };
+  side.prepend(btn);
+  side.classList.add('collapsible');
+  setOpen(false);
+  btn.addEventListener('click', () => setOpen(!side.classList.contains('open')));
+  side.addEventListener('click', e => { if(e.target.closest('a')) setOpen(false); });
 })();
 
 // Resaltar en la barra lateral la semana visible

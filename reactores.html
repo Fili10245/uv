@@ -183,7 +183,7 @@
     <p class="note">Balance general de moles: $\;F_{A0} - F_A + \displaystyle\int^{V} r_A\,dV = \frac{dN_A}{dt}$</p>
 
     <h4>1. Estado estacionario</h4>
-    <div class="pair">
+    <div class="pair stack">
       <div>
         <h5>Balance de moles</h5>
         $$ \text{CSTR:}\quad V = \frac{F_{A0}X}{-r_A} $$
@@ -202,7 +202,7 @@
     <p>Cuando el reactor arranca, se para o sufre una perturbación, aparecen los términos de acumulación.
     Estas son las ecuaciones que resolveremos en el Bloque 2 (semanas 5 a 8).</p>
 
-    <div class="pair">
+    <div class="pair stack">
       <div>
         <h5>Balance de moles · lotes</h5>
         $$ N_{A0}\frac{dX}{dt} = -r_A V $$
@@ -214,7 +214,7 @@
       </div>
     </div>
 
-    <div class="pair">
+    <div class="pair stack">
       <div>
         <h5>Balance de moles · CSTR</h5>
         $$ \frac{dC_A}{dt} = \frac{C_{A0} - C_A}{\tau} + r_A $$
@@ -228,7 +228,7 @@
       </div>
     </div>
 
-    <div class="pair">
+    <div class="pair stack">
       <div>
         <h5>Balance de moles · PFR</h5>
         $$ \frac{\partial C_A}{\partial t} = -v_0\,\frac{\partial C_A}{\partial V} + r_A $$
@@ -542,7 +542,7 @@ plt.show()</code></pre></div>
     $a = 4/d_t$ = área de intercambio por unidad de volumen, $U$ = coeficiente global de transferencia de calor.</p>
 
     <h4>1. Estado estacionario</h4>
-    <div class="pair">
+    <div class="pair stack">
       <div>
         <h5>Balance de moles</h5>
         $$ D_a\frac{d^2C_A}{dz^2} - u\frac{dC_A}{dz} + r_A = 0 $$
@@ -572,7 +572,7 @@ plt.show()</code></pre></div>
     La concentración da un “salto” en la entrada, igual que en un CSTR.</p>
 
     <h4>3. Estado no estacionario (dinámico)</h4>
-    <div class="pair">
+    <div class="pair stack">
       <div>
         <h5>Balance de moles</h5>
         $$ \frac{\partial C_A}{\partial t} = D_a\frac{\partial^2 C_A}{\partial z^2} - u\frac{\partial C_A}{\partial z} + r_A $$
